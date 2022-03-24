@@ -4,37 +4,45 @@ import Category from './Category';
 
 function App() {
     const [todo, setTodo] = useState('');
-    const [todos, setTodos] = useState([
-        {
-            name: "General",
-            category_list: []
-        },
-        {
-            name: "Food",
-            category_list: []
-        }
-    ]);
-    const [cat, setCat] = useState("General");
+    const [cat, setCat] = useState('General');
+    const [todos, setTodos] = useState(() => {
+        const todolistStorage = localStorage.getItem('todolist');
 
-    const handleClick = () => {
+        return JSON.parse(todolistStorage) ?? [
+            {
+                name: "General",
+                category_list: []
+            },
+            {
+                name: "Homework",
+                category_list: []
+            }
+        ]
+    });
+
+    const addTodo = () => {
         if (todo !== '') {
-            
             setTodos(prev => {
-                let currentCat = prev.find((ele) => {
-                    return ele.name === cat;
-                })
-                console.log(prev[prev.indexOf(currentCat)].category_list);
+                let currentCat = prev.find(ele => ele.name === cat);
+
                 prev[prev.indexOf(currentCat)].category_list.push(todo);
-                console.log(prev[prev.indexOf(currentCat)].category_list);
 
                 return prev;
-            });
+            })
         }
-        // setTodo('');
+        setTodo('');
     }
+
+    useEffect(() => {
+        const todolistJSON = JSON.stringify(todos);
+
+        localStorage.setItem('todolist', todolistJSON);
+
+    })
 
     return (
         <div className="App">
+            <div className="background"></div>
             <div className="wrapper">
                 <h3>To-Do List</h3>
                 <div className="input-wrapper">
@@ -43,13 +51,13 @@ function App() {
                         onChange={e => setTodo(e.target.value)}
                         type="text" 
                     />
-                    <select onChange={(e) => {setCat(e.target.value)}} name="category" id="">
-                        <option value="General">Chung</option>
-                        <option value="Food">Food</option>
+                    <select onChange={e => {setCat(e.target.value)}} name="" id="">
+                        <option value="General">General</option>
+                        <option value="Homework">Homework</option>
                     </select>
                     <button 
                         className='add-btn'
-                        onClick={handleClick}
+                        onClick={addTodo}
                     >
                         Add
                     </button>
