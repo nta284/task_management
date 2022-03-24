@@ -44,7 +44,7 @@ function App() {
                         type="text" 
                     />
                     <select onChange={(e) => {setCat(e.target.value)}} name="category" id="">
-                        <option value="General">General</option>
+                        <option value="General">Chung</option>
                         <option value="Food">Food</option>
                     </select>
                     <button 
