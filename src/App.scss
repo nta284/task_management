@@ -1,49 +1,63 @@
+$addtodo-section-width: 22%;
+$section-border-radius: 10px;
+$section-bc-color: rgb(250, 250, 250);
+
 .App {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    height: 100vh;
     
     .background {
         position: fixed;
         width: 100%;
         height: 100vh;
-        background: linear-gradient(135deg, #009DE8 30%, rgb(70,69,244) 100%);
+        background: linear-gradient(135deg, rgb(10, 177, 255) 15%, rgb(28, 145, 255) 100%);
         z-index: -1;
     }
 
     .wrapper {
-        margin-top: 150px;
-        min-width: 400px;
-        background-color: #fff;
-        padding: 15px;
-        border-radius: 5px;
+        display: flex;
+        padding: 50px;
+        height: 100%;
 
-        h3 {
-            font-size: 2.3rem;
-            font-weight: 500;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .input-wrapper {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 15px;
-
-            input {
-                height: 36px;
-                width: 100%;
+        .addtodo-section {
+            width: $addtodo-section-width;
+            background-color: $section-bc-color;
+            padding: 15px;
+            border-radius: $section-border-radius;
+            margin-right: 40px;
+            box-shadow: rgba(88, 92, 95, 0.2) 0px 8px 24px;
+    
+            h3 {
+                font-size: 2.3rem;
+                font-weight: 500;
+                text-align: center;
+                margin-bottom: 15px;
+            }
+    
+            .todo-input-wrapper {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 15px;
+    
+                input {
+                    height: 36px;
+                    width: 100%;
+                }
             }
         }
-
-        .todolist {
-            margin-top: 10px;
-            min-height: 100px;
-            // overflow-y: auto;
-
-            // .list {
-            //     width: 300px;
-            // }
+    
+        .todolist-section {
+            width: calc(100% - $addtodo-section-width);
+            height: 100%;
+            background-color: $section-bc-color;
+            border-radius: $section-border-radius;
+            box-shadow: rgba(88, 92, 95, 0.2) 0px 8px 24px;
+            display: flex;
+            justify-content: start;
+            align-items: flex-start;
+            flex-wrap: nowrap;
+            padding: 20px 0;
+            overflow-x: auto;
+            overflow-y: hidden;
         }
     }
 }

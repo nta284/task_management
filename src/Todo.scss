@@ -1,13 +1,14 @@
 
 .todo {
-    height: 40px;
+    min-height: 38px;
     margin-bottom: 10px;
     // background-color: rgb(255, 51, 51);
     color: #fff;
+    line-height: 20px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 15px;
+    // justify-content: space-between;
+    padding: 8px 15px;
     border-radius: 3px;
     transition: 0.2s ease-out;
     
@@ -16,26 +17,28 @@
     }
     
     .todo_name {
+        flex: 1;
         font-size: 1.5rem;
         // font-weight: 440;
+        padding-right: 10px;
         position: relative;
         
         &::before {
             content: '';
             position: absolute;
-            width: calc(100% + 4px);
+            width: calc(100% - 5px);
             height: 1px;
             top: 49%;
             left: -2px;
             background-color: #fff;
             transform-origin: left;
             transform: scaleX(0);
-            transition: 0.2s ease-out;
+            transition: 0.15s ease-out;
         }
     }
     
     &.todo--done {
-        opacity: 0.4;
+        opacity: 0.3;
         
         .todo_name {
             &::before {
@@ -44,6 +47,12 @@
         }
     }
 
+    .delete-icon {
+        cursor: pointer;
+        font-size: 1.82rem;
+        margin-right: 8px;
+    }
+    
     .done-icon {
         cursor: pointer;
         font-size: 1.82rem;
