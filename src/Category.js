@@ -1,38 +1,71 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {  faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import './Category.scss';
 import Todo from './Todo';
 
 export default function Category(props) {
-    const { catIndex, name, list, handleDelete } = props;
+    const {
+        catIndex,
+        cat_name,
+        cat_list,
+        handleDeleteTodo,
+        handleDeleteCat,
+        handleMarkDoneTodo
+    } = props;
 
     const colors = [
-        "#7A0BC0",
-        "#11999E",
-        "#FF5713",
-        "#4D77FF",
-        "#69b469"
+        "#FF6D6D",
+        "#844AFF",
+        "#2BFF8C",
+        "#ff9d41",
+        "#1370FF",
+        "#ec00d9"
     ]
 
     function onDeleteCatTodo(todoIndex) {
-        handleDelete(catIndex, todoIndex);
+        handleDeleteTodo(catIndex, todoIndex);
     }
 
+    function onDeleteCat() {
+        handleDeleteCat(catIndex);
+    }
+
+    function onMarkDoneTodo(todoIndex) {
+        handleMarkDoneTodo(catIndex, todoIndex);
+    }
 
     return (
         <div className="category">
-            <h2 className='category_name'>{name}</h2>
+            <div className='category_heading'>
+                <span className="category_name">
+                    {cat_name}
+                </span>
+                <FontAwesomeIcon 
+                    icon={faTrashCan}
+                    className="todo-icon cat-delete-icon"
+                    onClick={onDeleteCat}
+                />
+            </div>
             <div className='category_list'>
-                {list.map((ele, index) => (
-                    <Todo
-                        key={index}
-                        todoIdex={index}
-                        className='todo'
-                        backgroundColor={colors[index % 5]}
-                        handleDelete={() => onDeleteCatTodo(index)}
-                    >
-                        {ele}
-                    </Todo>
-                ))}
+                {cat_list.map((todo, index) => {
+                    if (!todo.isDeleted) {
+                        return (
+                            <Todo
+                                key={index}
+                                todoIndex={index}
+                                className='todo'
+                                backgroundColor={colors[index % 6]}
+                                onClick={() => {console.log(index)}}
+                                isDone={todo.isDone}
+                                handleDelete={() => onDeleteCatTodo(index)}
+                                handleMarkDone={() => onMarkDoneTodo(index)}
+                            >
+                                {todo.todo_name}
+                            </Todo>
+                        )
+                    }
+                })}
             </div>
         </div>
     )

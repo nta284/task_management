@@ -20,13 +20,21 @@ $category-margin: 8px;
         margin-right: calc($category-margin * 2.2);
     }
     
-    .category_name {
+    .category_heading {
         background-color: #fff;
         font-size: 1.8rem;
         line-height: 22px;
         font-weight: 440;
-        text-align: center;
-        padding: 8px 0 14px;
+        text-align: left;
+        padding: 8px 5px 14px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .cat-delete-icon {
+            font-size: 1.4rem;
+            color: #999;
+        }
     }
     
     .category_list {

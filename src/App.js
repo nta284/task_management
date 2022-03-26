@@ -4,74 +4,78 @@ import Category from './Category';
 
 function App() {
     const [cat, setCat] = useState('');
-    const [catList, setCatList] = useState(['Chung']);
     const [currentCat, setCurrentCat] = useState('Chung');
 
     const [todo, setTodo] = useState('');
     const [todos, setTodos] = useState(() => {
-        const todolistStorage = localStorage.getItem('todolist');
-        return [
-            {
-                name: "Chung",
-                category_list: []
-            }
-        ];
+        const todolistStorage = localStorage.getItem('todoList');
 
-        // return JSON.parse(todolistStorage) ?? [
-        //     {
-        //         name: "Chung",
-        //         category_list: []
-        //     },
-        //     {
-        //         name: "Bài tập",
-        //         category_list: []
-        //     },
-        //     {
-        //         name: "Chung",
-        //         category_list: []
-        //     },
-        //     {
-        //         name: "Bài tập",
-        //         category_list: []
-        //     }
-        // ]
+        return JSON.parse(todolistStorage) ?? [
+            {
+                cat_name: "Chung",
+                cat_list: []
+            }
+        ]
     });
 
     function addCat() {
         if (cat !== '') {
-            setCatList(prev => [...prev, cat]);
             setCat('');
+
+            setTodos(prev => [
+                ...prev,
+                {
+                    cat_name: cat,
+                    cat_list: []
+                }
+            ])
+
+            setCurrentCat(cat);
         }
     }
 
-    const addTodo = () => {
+    function addTodo() {
         if (todo !== '') {
-            setTodos(prev => {
-                let targetCat = prev.find(ele => ele.name === currentCat);
+            let newTodos = [...todos];
+            let targetCat = todos.find(ele => ele.cat_name === currentCat);
+            let newTodo = {
+                todo_name: todo,
+                isDone: false,
+                isDeleted: false
+            }
 
-                prev[prev.indexOf(targetCat)].category_list.push(todo);
-
-                return prev;
-            })
+            newTodos[newTodos.indexOf(targetCat)].cat_list.push(newTodo);
+            setTodos(newTodos);
         }
         setTodo('');
     }
 
-    // useEffect(() => {
-    //     const todolistJSON = JSON.stringify(todos);
-
-    //     localStorage.setItem('todolist', todolistJSON);
-    // })
-
-    function deleleTodo(catIndex, todoIndex) {
-        console.log(catIndex, todoIndex);
-
+    function deleteTodo(catIndex, todoIndex) {
         let newTodos = [...todos];
 
-        newTodos[catIndex].category_list.splice(todoIndex, 1);
+        newTodos[catIndex].cat_list[todoIndex].isDeleted = !newTodos[catIndex].cat_list[todoIndex].isDeleted;
 
         setTodos(newTodos);
     }
+
+    function deleteCat(catIndex) {
+        setTodos(prev => prev.filter((ele, index) => {
+            return index !== catIndex;
+        }))
+    }
+
+    function markDoneTodo(catIndex, todoIndex) {
+        let newTodos = [...todos];
+
+        newTodos[catIndex].cat_list[todoIndex].isDone = !newTodos[catIndex].cat_list[todoIndex].isDone;
+
+        setTodos(newTodos);
+    }
+
+    useEffect(() => {
+        const todolistJSON = JSON.stringify(todos);
+        localStorage.setItem('todoList', todolistJSON);
+    })
 
     return (
         <div className="App">
@@ -82,18 +86,14 @@ function App() {
                     <div className="todo-input-wrapper">
                         <input
                             value={todo}
+                            placeholder="Thêm việc cần làm"
                             onChange={e => setTodo(e.target.value)}
+                            onKeyDown={e => {
+                                if (e.keyCode === 13) {
+                                    addTodo();
+                                }
+                            }}
                         />
-                        <select onChange={e => {setCurrentCat(e.target.value)}} name="" id="">
-                            {catList.map((cat, index) => (
-                                <option
-                                    key={index}
-                                    value={cat}
-                                >
-                                    {cat}
-                                </option>
-                            ))}
-                        </select>
                         <button 
                             className='add-btn'
                             onClick={addTodo}
@@ -101,14 +101,34 @@ function App() {
                             Thêm
                         </button>
                     </div>
+                    
+                    {/* <select onChange={e => {setCurrentCat(e.target.value)}} value={currentCat} name="" id="">
+                        {todos.map((todo, index) => (
+                            <option
+                                key={index}
+                                value={todo.name}
+                            >
+                                {todo.name}
+                            </option>
+                        ))}
+                    </select> */}
+                    <h4>Danh sách danh mục:</h4>
                     <div className="cat-input-wrapper">
                         <input
                             value={cat}
+                            placeholder="Thêm danh mục mới"
                             onChange={e => {setCat(e.target.value)}}
+                            onKeyDown={e => {
+                                if (e.keyCode === 13) {
+                                    addCat();
+                                }
+                            }}
                         />
-                        <button onClick={addCat}>
+                        <button className='addcat-btn' onClick={addCat}>
                             Thêm danh mục
                         </button>
+                    </div>
+                    <div className="cat-section">
                     </div>
                 </div>
                 <div className="todolist-section">
@@ -117,9 +137,11 @@ function App() {
                             <Category
                                 key={index}
                                 catIndex={index}
-                                name={category.name}
-                                list={category.category_list}
-                                handleDelete={deleleTodo}
+                                cat_name={category.cat_name}
+                                cat_list={category.cat_list}
+                                handleDeleteTodo={deleteTodo}
+                                handleDeleteCat={deleteCat}
+                                handleMarkDoneTodo={markDoneTodo}
                             />
                         ))}
                     </>

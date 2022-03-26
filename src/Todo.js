@@ -1,33 +1,44 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClipboardCheck, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import './Todo.scss';
 
 export default function Todo(props) {
-    const { index, backgroundColor, children, handleDelete } = props;
+    const {
+        todoIndex,
+        isDone,
+        backgroundColor,
+        children,
+        handleDelete,
+        handleMarkDone
+    } = props;
 
-    const [done, setDone] = useState(false);
+    function onDeleteTodo() {
+        handleDelete(todoIndex);
+    }
 
-    function onDeleteTodo(index) {
-        handleDelete(index);
+    function onMarkDoneTodo() {
+        handleMarkDone(todoIndex)
     }
 
     return (
         <div 
-            className={done ? "todo todo--done" : "todo"}
+            className={isDone ? "todo todo--done" : "todo"}
             style={{backgroundColor: backgroundColor}}
         >
             <span className="todo_name">{children}</span>
-            <FontAwesomeIcon 
-                icon={faTrashCan}
-                className="delete-icon"
-                onClick={() => onDeleteTodo(index)}
-            />
-            <FontAwesomeIcon 
-                icon={faClipboardCheck}
-                className="done-icon"
-                onClick={() => {setDone(!done)}}
-            />
+            <div className="todo_icon-section">
+                <FontAwesomeIcon
+                    icon={faTrashCan}
+                    className="todo-icon todo-delete-icon"
+                    onClick={onDeleteTodo}
+                />
+                <FontAwesomeIcon
+                    icon={faClipboardCheck}
+                    className="todo-icon todo-done-icon"
+                    onClick={onMarkDoneTodo}
+                />
+            </div>
         </div>
     )
 }

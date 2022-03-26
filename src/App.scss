@@ -9,7 +9,7 @@ $section-bc-color: rgb(250, 250, 250);
         position: fixed;
         width: 100%;
         height: 100vh;
-        background: linear-gradient(135deg, rgb(10, 177, 255) 15%, rgb(28, 145, 255) 100%);
+        background: linear-gradient(135deg, rgb(80,153,244) 15%, rgb(80, 124, 244) 100%);
         z-index: -1;
     }
 
@@ -21,10 +21,12 @@ $section-bc-color: rgb(250, 250, 250);
         .addtodo-section {
             width: $addtodo-section-width;
             background-color: $section-bc-color;
-            padding: 15px;
             border-radius: $section-border-radius;
+            display: flex;
+            flex-direction: column;
             margin-right: 40px;
             box-shadow: rgba(88, 92, 95, 0.2) 0px 8px 24px;
+            padding: 10px;
     
             h3 {
                 font-size: 2.3rem;
@@ -35,13 +37,85 @@ $section-bc-color: rgb(250, 250, 250);
     
             .todo-input-wrapper {
                 display: flex;
-                justify-content: center;
-                margin-bottom: 15px;
+                align-items: center;
+                margin-bottom: 20px;
     
                 input {
                     height: 36px;
                     width: 100%;
+                    padding: 0 10px;
+                    margin-right: 5px;
+                    border-radius: 18px;
+                    // border: 2px solid rgba(103, 21, 255, 0.55);
+                    border: 2px solid rgba(41, 86, 211, 0.6);
+                    
+                    &:focus {
+                        outline: none;
+                        // border: 2px solid rgb(103, 21, 255);
+                        border: 2px solid rgb(41, 86, 211);
+                    }
                 }
+
+                .add-btn {
+                    height: 36px;
+                    // background-color: rgb(103, 21, 255);
+                    background-color: rgb(41, 86, 211);
+                    border: none;
+                    border-radius: 18px;
+                    color: #fff;
+                    font-weight: 500;
+                    font-size: 1.4rem;
+                    padding: 0 12px;
+                    cursor: pointer;
+                }
+            }
+
+            h4 {
+                font-size: 1.8rem;
+                margin-bottom: 10px;
+            }
+
+            .cat-input-wrapper {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 10px;
+    
+                input {
+                    height: 36px;
+                    // width: 100%;
+                    padding: 0 10px;
+                    // margin-right: 5px;
+                    border-radius: 18px;
+                    border: 2px solid rgba(103, 21, 255, 0.55);
+                    // border: 2px solid rgba(41, 86, 211, 0.6);
+                    
+                    &:focus {
+                        outline: none;
+                        border: 2px solid rgb(103, 21, 255);
+                        // border: 2px solid rgb(41, 86, 211);
+                    }
+                }
+
+                .addcat-btn {
+                    // flex: 1;
+                    height: 36px;
+                    background-color: rgb(103, 21, 255);
+                    // background-color: rgb(41, 86, 211);
+                    border: none;
+                    border-radius: 18px;
+                    color: #fff;
+                    font-weight: 500;
+                    font-size: 1.1rem;
+                    // padding: 0 12px;
+                    cursor: pointer;
+                }
+            }
+
+            .cat-section {
+                height: 100%;
+                background-color: #e7eff6;
+                border-radius: 8px;
             }
         }
     

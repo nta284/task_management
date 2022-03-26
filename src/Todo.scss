@@ -7,8 +7,8 @@
     line-height: 20px;
     display: flex;
     align-items: center;
-    // justify-content: space-between;
-    padding: 8px 15px;
+    justify-content: space-between;
+    padding: 8px 10px 8px 12px;
     border-radius: 3px;
     transition: 0.2s ease-out;
     
@@ -17,7 +17,6 @@
     }
     
     .todo_name {
-        flex: 1;
         font-size: 1.5rem;
         // font-weight: 440;
         padding-right: 10px;
@@ -47,19 +46,17 @@
         }
     }
 
-    .delete-icon {
-        cursor: pointer;
-        font-size: 1.82rem;
-        margin-right: 8px;
-    }
-    
-    .done-icon {
-        cursor: pointer;
-        font-size: 1.82rem;
-        transition: 0.15s;
-
-        &:hover {
-            transform: scale(1.25);
+    .todo_icon-section {
+        display: flex;
+        align-items: center;
+        
+        .todo-delete-icon {
+            font-size: 1.8rem;
+            margin-right: 8px;
+        }
+        
+        .todo-done-icon {
+            font-size: 1.82rem;
         }
     }
 }
