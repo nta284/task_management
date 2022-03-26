@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;440;500;510&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;440;500;510&display=swap');
 
 * {
     box-sizing: border-box;
@@ -7,8 +7,12 @@
 
 html {
     font-size: 62.5%;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     color: #333;
+}
+
+input, button {
+    font-family: inherit;
 }
 
 .todo-icon {

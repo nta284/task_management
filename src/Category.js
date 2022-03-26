@@ -15,12 +15,12 @@ export default function Category(props) {
     } = props;
 
     const colors = [
-        "#FF6D6D",
+        "#ff5b5b",
         "#844AFF",
-        "#2BFF8C",
-        "#ff9d41",
+        "#20ff84",
+        "#ffb62e",
         "#1370FF",
-        "#ec00d9"
+        "#ff65c4"
     ]
 
     function onDeleteCatTodo(todoIndex) {
@@ -56,7 +56,6 @@ export default function Category(props) {
                                 todoIndex={index}
                                 className='todo'
                                 backgroundColor={colors[index % 6]}
-                                onClick={() => {console.log(index)}}
                                 isDone={todo.isDone}
                                 handleDelete={() => onDeleteCatTodo(index)}
                                 handleMarkDone={() => onMarkDoneTodo(index)}
