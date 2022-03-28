@@ -88,7 +88,7 @@ function App() {
             <div className="background"></div>
             <div className="wrapper">
                 <div className="addtodo-section">
-                    <h3>To-Do List</h3>
+                    <h3>Personal Task Manager</h3>
                     <div className="todo-input-wrapper">
                         <input
                             value={todo}
