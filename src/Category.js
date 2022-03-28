@@ -21,7 +21,7 @@ export default function Category(props) {
         "linear-gradient(90deg, #4e5157, #454a52)",
         "linear-gradient(90deg, #eea526, #e79b18)",
         "linear-gradient(90deg, #0a8cd8, #0087d4)",
-        "linear-gradient(90deg, #e9517c, #e74774)"
+        "linear-gradient(90deg, #eb4f7b, #eb4a77)"
     ]
 
     function onDeleteCatTodo(todoIndex) {
