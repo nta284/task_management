@@ -2,7 +2,7 @@
 $category-margin: 8px;
 
 .category {
-    min-width: calc((100% - 10.4 * $category-margin) / 4);
+    width: calc((100% - 10.4 * $category-margin) / 4);
     height: 100%;
     // height: fit-content;
     background-color: #fff;
@@ -22,14 +22,38 @@ $category-margin: 8px;
     
     .category_heading {
         background-color: #fff;
-        font-size: 1.8rem;
-        line-height: 22px;
         font-weight: 440;
         text-align: left;
-        padding: 8px 5px 14px 10px;
+        padding: 8px 2px 14px 6px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        
+        .category_name {
+            flex: 1;
+            font-size: 1.8rem;
+            line-height: 22px;
+            margin-right: 3px;
+        }
+
+        .category_heading_progress {
+            margin-right: 8px;
+            display: flex;
+
+            .category_heading_progress-text {
+                margin-right: 1px;
+                color: #888;
+                
+                span {
+                    font-size: 1.3rem;
+                }
+            }
+
+            .category_heading_progress-check {
+                font-size: 1.25rem;
+                color: rgb(0, 201, 0);
+                transform: scaleX(0.8);
+            }
+        }
 
         .cat-delete-icon {
             font-size: 1.4rem;

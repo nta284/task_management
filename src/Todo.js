@@ -24,7 +24,7 @@ export default function Todo(props) {
     return (
         <div 
             className={isDone ? "todo todo--done" : "todo"}
-            style={{backgroundColor: backgroundColor}}
+            style={{background: backgroundColor}}
         >
             <span className="todo_name">{children}</span>
             <div className="todo_icon-section">

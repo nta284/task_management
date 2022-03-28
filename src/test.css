@@ -1,8 +1,9 @@
 * {
-    color: #ff5b5b;
-    color: #844AFF;
-    color: #20ff84;
-    color: #ffb62e;
-    color: #1370FF;
-    color: #ff65c4;
+    color: linear-gradient(90deg, #ff5f5f, #ff2a2a);
+    color: linear-gradient(90deg, #9b06d6, #8E05C2);
+    color: linear-gradient(90deg, #71ac65, #4E9F3D);
+    color: linear-gradient(90deg, #4e5157, #454a52);
+    color: linear-gradient(90deg, #eea526, #e79b18);
+    color: linear-gradient(90deg, #0a8cd8, #0087d4);
+    color: linear-gradient(90deg, #e9517c, #e74774);
 }

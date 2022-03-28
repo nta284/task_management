@@ -19,7 +19,7 @@ function App() {
     });
 
     function addCat() {
-        if (cat !== '') {
+        if (cat !== '' && !todos.some(todo => todo.cat_name === cat)) {
             setCat('');
 
             setTodos(prev => [
@@ -75,7 +75,13 @@ function App() {
     useEffect(() => {
         const todolistJSON = JSON.stringify(todos);
         localStorage.setItem('todoList', todolistJSON);
-    })
+    }, [todos])
+
+    useEffect(() => {
+        if (!todos.some(todo => todo.cat_name === currentCat) && todos.length > 0) {
+            setCurrentCat(todos[0].cat_name);
+        }
+    }, [todos, currentCat])
 
     return (
         <div className="App">
@@ -101,17 +107,6 @@ function App() {
                             Thêm
                         </button>
                     </div>
-                    
-                    {/* <select onChange={e => {setCurrentCat(e.target.value)}} value={currentCat} name="" id="">
-                        {todos.map((todo, index) => (
-                            <option
-                                key={index}
-                                value={todo.name}
-                            >
-                                {todo.name}
-                            </option>
-                        ))}
-                    </select> */}
                     <h4>Danh sách danh mục:</h4>
                     <div className="cat-input-wrapper">
                         <input
@@ -128,7 +123,25 @@ function App() {
                             Thêm danh mục
                         </button>
                     </div>
-                    <div className="cat-section">
+                    <div className="cat-list">
+                        {todos.map((todo, index) => {
+                            let isSelecting = currentCat === todo.cat_name;
+                            return (
+                                <div 
+                                    key={index}
+                                    className={isSelecting ? "cat-select cat-select--selecting" : "cat-select"}
+                                    onClick={() => {setCurrentCat(todo.cat_name)}}
+                                >
+                                    <div className="cat-select-name">{todo.cat_name}</div>
+                                    <div className="cat-select-box">
+                                        <div 
+                                            className={isSelecting ? "cat-select-dot cat-select-dot--selecting" : "cat-select-dot"}
+                                        >
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        })}
                     </div>
                 </div>
                 <div className="todolist-section">
