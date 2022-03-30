@@ -9,8 +9,8 @@ export default function Category(props) {
         catIndex,
         cat_name,
         cat_list,
-        handleDeleteTodo,
         handleDeleteCat,
+        handleDeleteTodo,
         handleMarkDoneTodo
     } = props;
 
@@ -26,10 +26,6 @@ export default function Category(props) {
 
     function onDeleteCatTodo(todoIndex) {
         handleDeleteTodo(catIndex, todoIndex);
-    }
-
-    function onDeleteCat() {
-        handleDeleteCat(catIndex);
     }
 
     function onMarkDoneTodo(todoIndex) {
@@ -60,7 +56,7 @@ export default function Category(props) {
                 <FontAwesomeIcon 
                     icon={faTrashCan}
                     className="todo-icon cat-delete-icon"
-                    onClick={onDeleteCat}
+                    onClick={() => handleDeleteCat(catIndex)}
                 />
             </div>
             <div className='category_list'>

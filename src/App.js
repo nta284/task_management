@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import './App.scss';
 import Category from './Category';
 
@@ -7,7 +7,11 @@ function App() {
     const [currentCat, setCurrentCat] = useState('Chung');
 
     const [todo, setTodo] = useState('');
-    const [todos, setTodos] = useState(() => {
+
+    // useReducer for todos
+    const initTodos = [];
+
+    function initializer() {
         const todolistStorage = localStorage.getItem('todoList');
 
         return JSON.parse(todolistStorage) ?? [
@@ -16,60 +20,101 @@ function App() {
                 cat_list: []
             }
         ]
-    });
-
-    function addCat() {
-        if (cat !== '' && !todos.some(todo => todo.cat_name === cat)) {
-            setCat('');
-
-            setTodos(prev => [
-                ...prev,
-                {
-                    cat_name: cat,
-                    cat_list: []
-                }
-            ])
-
-            setCurrentCat(cat);
-        }
     }
 
-    function addTodo() {
-        if (todo !== '') {
-            let newTodos = [...todos];
-            let targetCat = todos.find(ele => ele.cat_name === currentCat);
-            let newTodo = {
-                todo_name: todo,
-                isDone: false,
-                isDeleted: false
-            }
-
-            newTodos[newTodos.indexOf(targetCat)].cat_list.push(newTodo);
-            setTodos(newTodos);
-        }
-        setTodo('');
-    }
-
-    function deleteTodo(catIndex, todoIndex) {
+    function todosReducer(todos, action) {
         let newTodos = [...todos];
 
-        newTodos[catIndex].cat_list[todoIndex].isDeleted = !newTodos[catIndex].cat_list[todoIndex].isDeleted;
+        switch(action.type) {
+            case 'ADD_CAT':
+                if (cat !== '' && !todos.some(todo => todo.cat_name === cat)) {
+                    setCat('');
+                    setCurrentCat(cat);
+        
+                    return [
+                        ...todos,
+                        {
+                            cat_name: cat,
+                            cat_list: []
+                        }
+                    ]
+                }
+                else {
+                    return newTodos;
+                }
 
-        setTodos(newTodos);
+            case 'DELETE_CAT':
+                return todos.filter((ele, index) => {
+                    return index !== action.catIndex;
+                })
+
+            case 'ADD_TODO':
+                if (todo !== '') {
+                    let newTodos = [...todos];
+                    let targetCat = todos.find(ele => ele.cat_name === currentCat);
+                    let newTodo = {
+                        todo_name: todo,
+                        isDone: false,
+                        isDeleted: false
+                    }
+                    setTodo('');
+                    
+                    newTodos[newTodos.indexOf(targetCat)].cat_list.push(newTodo);
+                    return newTodos;
+                }
+                else {
+                    return newTodos;
+                }
+
+            case 'DELETE_TODO':
+                newTodos[action.catIndex].cat_list[action.todoIndex].isDeleted = !newTodos[action.catIndex].cat_list[action.todoIndex].isDeleted;
+                return newTodos;
+
+            case 'MARK_DONE_TODO':
+                newTodos[action.catIndex].cat_list[action.todoIndex].isDone = !newTodos[action.catIndex].cat_list[action.todoIndex].isDone;
+                return newTodos;
+
+            default:
+                return newTodos;
+        }
+    }
+
+    const [todos, todosDispatch] = useReducer(todosReducer, initTodos, initializer);
+
+
+    function addCat() {
+        todosDispatch({
+            type: 'ADD_CAT'
+        })
     }
 
     function deleteCat(catIndex) {
-        setTodos(prev => prev.filter((ele, index) => {
-            return index !== catIndex;
-        }))
+        todosDispatch({
+            type: 'DELETE_CAT',
+            catIndex
+        })
+    }
+
+    function addTodo() {
+        todosDispatch({
+            type: 'ADD_TODO'
+        })
+    }
+
+    function deleteTodo(catIndex, todoIndex) {
+        todosDispatch({
+            type: 'DELETE_TODO',
+            catIndex,
+            todoIndex
+        })
     }
 
     function markDoneTodo(catIndex, todoIndex) {
-        let newTodos = [...todos];
-
-        newTodos[catIndex].cat_list[todoIndex].isDone = !newTodos[catIndex].cat_list[todoIndex].isDone;
-
-        setTodos(newTodos);
+        todosDispatch({
+            type: 'MARK_DONE_TODO',
+            catIndex,
+            todoIndex
+        })
     }
 
     useEffect(() => {
@@ -152,8 +197,8 @@ function App() {
                                 catIndex={index}
                                 cat_name={category.cat_name}
                                 cat_list={category.cat_list}
-                                handleDeleteTodo={deleteTodo}
                                 handleDeleteCat={deleteCat}
+                                handleDeleteTodo={deleteTodo}
                                 handleMarkDoneTodo={markDoneTodo}
                             />
                         ))}

@@ -13,14 +13,6 @@ export default function Todo(props) {
         handleMarkDone
     } = props;
 
-    function onDeleteTodo() {
-        handleDelete(todoIndex);
-    }
-
-    function onMarkDoneTodo() {
-        handleMarkDone(todoIndex)
-    }
-
     return (
         <div 
             className={isDone ? "todo todo--done" : "todo"}
@@ -31,12 +23,12 @@ export default function Todo(props) {
                 <FontAwesomeIcon
                     icon={faTrashCan}
                     className="todo-icon todo-delete-icon"
-                    onClick={onDeleteTodo}
+                    onClick={() => handleDelete(todoIndex)}
                 />
                 <FontAwesomeIcon
                     icon={faClipboardCheck}
                     className="todo-icon todo-done-icon"
-                    onClick={onMarkDoneTodo}
+                    onClick={() => handleMarkDone(todoIndex)}
                 />
             </div>
         </div>
