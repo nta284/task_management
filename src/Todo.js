@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClipboardCheck, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import './Todo.scss';

@@ -1,12 +1,20 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect, useReducer, useRef } from 'react';
 import './App.scss';
 import Category from './Category';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 function App() {
     const [cat, setCat] = useState('');
     const [currentCat, setCurrentCat] = useState('Chung');
 
     const [todo, setTodo] = useState('');
+
+    const [date, onChange] = useState(new Date());
+
+    console.log(date.toLocaleDateString());
+
+    const todoInput = useRef(null);
 
     // useReducer for todos
     const initTodos = [];
@@ -28,6 +36,7 @@ function App() {
         switch(action.type) {
             case 'ADD_CAT':
                 if (cat !== '' && !todos.some(todo => todo.cat_name === cat)) {
+                    todoInput.current.focus();
                     setCat('');
                     setCurrentCat(cat);
         
@@ -50,14 +59,14 @@ function App() {
 
             case 'ADD_TODO':
                 if (todo !== '') {
-                    let newTodos = [...todos];
+                    todoInput.current.focus();
+                    setTodo('');
                     let targetCat = todos.find(ele => ele.cat_name === currentCat);
                     let newTodo = {
                         todo_name: todo,
                         isDone: false,
                         isDeleted: false
                     }
-                    setTodo('');
                     
                     newTodos[newTodos.indexOf(targetCat)].cat_list.push(newTodo);
                     return newTodos;
@@ -136,6 +145,7 @@ function App() {
                     <h3>Personal Task Manager</h3>
                     <div className="todo-input-wrapper">
                         <input
+                            ref={todoInput}
                             value={todo}
                             placeholder="Thêm việc cần làm"
                             onChange={e => setTodo(e.target.value)}
@@ -169,6 +179,7 @@ function App() {
                         </button>
                     </div>
                     <div className="cat-list">
+                        <Calendar onChange={onChange} value={date} />
                         {todos.map((todo, index) => {
                             let isSelecting = currentCat === todo.cat_name;
                             return (
