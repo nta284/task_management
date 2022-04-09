@@ -1,0 +1,409 @@
+
+.task {
+    position: relative;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    color: #fff;
+    transition: 0.2s ease-out;
+    z-index: 1;
+    background-color: rgb(228, 228, 228);
+    overflow-y: hidden;
+    
+    &:last-child {
+        margin-bottom: 0;
+    }
+    
+    .task-wrapper {
+        min-height: 40px;
+        line-height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 3px;
+        padding: 8px 10px 8px 12px;
+        z-index: 2;
+
+        .task_checkbox {
+            box-sizing: content-box;
+            position: absolute;
+            left: -70px;
+            width: 156px;
+            height: 156px;
+            border-radius: 50%;
+            background-color: #fff;
+            background-clip: content-box;
+            border: 10px solid transparent;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: scale(0.1);
+            cursor: pointer;
+            
+            .task_check {
+                font-size: 10rem;
+            }
+        }
+    
+        .task_name-wrapper {
+            margin-left: 22px;
+            flex: 1;
+            position: relative;
+            margin-right: 10px;
+            margin-top: 1px;
+        
+            .task_name {
+                font-size: 1.5rem;
+                line-height: 20px;
+                z-index: 5;
+        
+                &.task_name--inactive {
+                    z-index: -1;
+                    opacity: 0;
+                }
+        
+                &::selection {
+                    background-color: #fff;
+                    color: #333;
+                }
+            }
+        
+            .task_edit {
+                position: absolute;
+                width: 100%;
+                top: 0;
+                left: 0;
+                font-size: 1.5rem;
+                line-height: 20px;
+                color: #fff;
+                padding: 0;
+                background-color: transparent;
+                border: none;
+                border-bottom: 1px solid white;
+                outline: none;
+                z-index: 5;
+                cursor: text;
+                
+                &:focus {
+                    outline: none;
+                }
+                
+                &.task_edit--inactive {
+                    opacity: 0;
+                    z-index: -1;
+                    cursor: default;
+                }
+        
+                &::selection {
+                    background-color: #fff;
+                    color: #333;
+                }
+            }
+    
+        }
+    
+        .task_icon-section {
+            display: flex;
+            align-items: center;
+            align-self: flex-start;
+            margin-top: 3px;
+            
+            .task-delete-icon {
+                font-size: 1.6rem;
+                margin-right: 7px;
+            }
+            
+            .task-done-icon {
+                font-size: 1.6rem;
+            }
+    
+            .task-edit-icon {
+                font-size: 1.6rem;
+                margin-right: 3px;
+            }
+    
+            .task-menu-icon {
+                width: 18px;
+                font-size: 1.7rem;
+                cursor: pointer;
+                margin-right: -8px;
+            }
+        }
+    }
+
+    .task_menu {
+        position: relative;
+        width: 100%;
+        top: 0;
+        height: 0px;
+        border-radius: 3px;
+        color: #666;
+        z-index: -1;
+        transition: 0.2s ease-out;
+
+        &.task_menu--active {
+            height: 208px;
+        }
+
+        .task_menu_title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+
+            .task_menu_icon {
+                font-size: 1.4rem;
+                color: #666;
+                margin-right: 4px;
+                width: 14px;
+            }
+
+            span {
+                font-size: 1.3rem;
+                margin-top: 2px;
+                font-weight: 500;
+
+                &::selection {
+                    background-color: transparent;
+                    color: #666;
+                }
+            }
+        }
+
+        .task_color {
+            padding: 8px 10px 0;
+            
+            .task_color_option-list {
+                // margin-top: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                .task_color_select {
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                    display: inline-block;
+                    border: 1px solid transparent;
+                    position: relative;
+                    z-index: 2;
+                    cursor: pointer;
+                    transition: 0.1s ease-out;
+                    
+                    .task_color_select_inner {
+                        position: absolute;
+                        width: 22px;
+                        height: 22px;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        border-radius: 50%;
+                        cursor: pointer;
+                        transition: 0.1s ease-out;
+                    }
+
+                    &:hover {
+                        border: 2px solid #ccc;
+                        
+                        .task_color_select_inner {
+                            width: 18px;
+                            height: 18px;
+                        }
+                    }
+                    
+                    &.task_color_select--selecting {
+                        border: 2px solid #0079BF;
+                        
+                        .task_color_select_inner {
+                            width: 16px;
+                            height: 16px;
+                        }
+                    }
+                }
+
+                .task_color_random-btn {
+                    width: 22px;
+                    height: 22px;
+                    border-radius: 50%;
+                    display: inline-block;
+                    background-color: rgb(200, 200, 200);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    z-index: 2;
+                    transition: 0.2s ease-out;
+                    
+                    .task_color_random-btn-icon {
+                        color: #333;
+                        font-size: 1.4rem;
+                    }
+                    
+                    &:hover {
+                        background-color: rgb(185, 185, 185);
+                    }
+                }
+            }
+        }
+
+        .task_description {
+            padding: 7px 10px 0;
+
+            .task_description_input {
+                outline: none;
+                font-family: inherit;
+                resize: none;
+                color: #333;
+                font-family: inherit;
+                background-color: rgb(237, 237, 237);
+                width: 100%;
+                height: 44px;
+                padding: 2px 4px;
+                line-height: 16px;
+                border: 1px solid transparent;
+                // border: 1px solid rgb(100, 134, 170);
+                border-radius: 4px;
+                overflow: auto;
+                cursor: pointer;
+                transition: 0.075s;
+                
+                &:hover {
+                    box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 2px;
+                    background-color: rgb(240, 240, 240);
+                }
+                
+                &:focus {
+                    cursor: text;
+                    background-color: rgb(242, 242, 242);
+                    border: 1px solid rgb(100, 134, 170);
+                    box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 2px;
+                }
+                
+                &::-webkit-scrollbar {
+                    background-color: rgb(240, 240, 240);
+                    width: 0.75rem;
+                    border-radius: 4px;
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    background-color: rgb(204, 204, 204);
+                    border-radius: 99px;
+                }
+
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
+
+        .task_date-and-time {
+            padding: 7px 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 2;
+            position: relative;
+
+            .task_date-and-time_item {
+                &.task_date {
+                    width: 55%;
+                }
+
+                &.task_time {
+                    width: 43%;
+                }
+
+                .task_date-and-time_title {
+                    margin-bottom: 3px;
+                    
+                    .task_date-and-time_checkbox {
+                        width: 14px;
+                        height: 14px;
+                        border: 1px solid #666;
+                        background-color: rgb(245, 245, 245);
+                        border-radius: 4px;
+                        margin-right: 5px;
+                        margin-top: 1px;
+                        z-index: 2;
+                        cursor: pointer;
+                        position: relative;
+
+                        .task_date-and-time_checkbox_inner {
+                            position: absolute;
+                            width: 14px;
+                            height: 14px;
+                            top: -1px;
+                            left: -1px;
+                            border-radius: inherit;
+                            background-color: #0185d2;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            cursor: pointer;
+
+                            .task_date-and-time_checkbox_tick {
+                                color: #fff;
+                                font-size: 0.9rem;
+                            }
+                        }
+                    }
+                }
+
+                .task_date-and-time_value {
+                    height: 22px;
+                    background-color: #fff;
+                    border-radius: 4px;
+                    border: 1px solid #CDD0D1;
+                    cursor: pointer;
+                    margin-left: 18px;
+                    display: flex;
+                    align-items: center;
+                    // justify-content: center;
+                    padding: 0 8px;
+                    transition: 0.1s ease-out;
+
+                    &:hover {
+                        border: 1px solid #acb2b3;
+                    }
+
+                    span {
+                        font-size: 1.3rem;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+
+        .task_menu_delete {
+            display: flex;
+            justify-content: end;
+            padding: 7px 10px 0;
+            
+            span {
+                border-radius: 3px;
+                background-color: rgb(255, 60, 60);
+                color: #fff;
+                font-size: 1.3rem;
+                font-weight: 500;
+                // line-height: 24px;
+                padding: 6px 12px 5px;
+                text-align: center;
+                z-index: 2;
+                cursor: pointer;
+                transition: 0.2s ease-out;
+
+                &:hover {
+                    background-color: rgb(234, 20, 20);
+                }
+            }
+        }
+    }
+        
+    &.task--done {
+        .task-wrapper {
+            .task_checkbox {
+                background-color: rgb(0, 201, 0);
+                border-color: #fff;
+            }
+        }
+    }
+}

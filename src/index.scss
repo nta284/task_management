@@ -1,14 +1,23 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;440;500;510&display=swap');
 
+$primary-background-color: #0079BF;
+$header-background-color: #006199;
+
 * {
     box-sizing: border-box;
+    z-index: inherit;
+    cursor: inherit;
+}
+
+*::selection {
+    background-color: rgb(57, 97, 198);
+    color: #fff;
 }
 
 html {
     font-size: 62.5%;
     font-family: 'Fira Sans', sans-serif;
-    // font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-weight: 400;
     color: #333;
 }
@@ -17,11 +26,100 @@ input, button {
     font-family: inherit;
 }
 
-.todo-icon {
+input {
+    cursor: text;
+}
+
+.task-icon {
     cursor: pointer;
     transition: 0.15s;
     
     &:hover {
-        transform: scale(1.25);
+        transform: scale(1.2);
     }
+}
+
+// Common
+
+.add-section {
+    position: relative;
+
+    .add-activate-btn {
+        width: 100%;
+        border-radius: 3px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 5;
+    
+        &.add-activate-btn--inactive {
+            opacity: 0;
+            z-index: -1;
+        }
+        
+        .add-activate_icon {
+            font-size: 1.5rem;
+            margin-right: 5px;
+            opacity: 0.9;
+        }
+        
+        span {
+            cursor: pointer;
+            margin-top: 2px;
+            font-size: 1.4rem;
+        }
+    }
+    
+    .add-input-section {
+        position: absolute;
+        top: 0;
+        display: flex;
+        z-index: 5;
+        
+        &.add-input-section--inactive {
+            z-index: -1;
+            opacity: 0;
+            cursor: default;
+        }
+    
+        .add-input {
+            flex: 1;
+            font-size: 1.5rem;
+            border: none;
+            border: 2px solid $primary-background-color;
+            border-right: none;
+            outline: none;
+            padding: 0 10px;
+            border-top-left-radius: 3px;
+            border-bottom-left-radius: 3px;
+            
+            &:focus {
+                outline: none;
+                border-color: #0068a3;
+            }
+        }
+        
+        .add-btn {
+            border: none;
+            background-color: #0068a3;
+            color: #fff;
+            padding: 0 10px;
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+            cursor: pointer;
+    
+            &:hover {
+                background-color: $header-background-color;
+            }
+        }
+    }
+}
+
+.opacity-0 {
+    opacity: 0;
+}
+
+.invisible {
+    visibility: hidden;
 }
