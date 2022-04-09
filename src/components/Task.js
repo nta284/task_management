@@ -25,7 +25,7 @@ export default function Task({
         handleEditTask,
         handleEditBgColor,
         handleEditTaskDescription,
-        handleToggleDateTimeModal
+        handleOpenDateTimeModal
     } = taskHandle;
 
     const [isEditing, setIsEditing] = useState(false);
@@ -41,6 +41,8 @@ export default function Task({
     const editInput = useRef(null);
     const task = useRef(null);
     const currentBgColor = useRef();
+
+    const dateValue = date !== null ? `${date.day}/${date.month}/${date.year}` : null;
 
     useLayoutEffect(() => {
         if (!isEditing) {
@@ -60,6 +62,7 @@ export default function Task({
     useEffect(() => {
         handleEditBgColor(taskIndex, bgColorValue);
         currentBgColor.current = bgColorValue;
+
         handleEditTaskDescription(taskIndex, descriptionValue);
     }, [bgColorValue, descriptionValue])
 
@@ -69,6 +72,7 @@ export default function Task({
         }
     }
 
+    // Trigger deactivateMenu when click outside
     useEffect(() => {
         window.addEventListener('click', deactivateMenu);
 
@@ -89,28 +93,31 @@ export default function Task({
                 <div className="task_checkbox" onClick={() => handleMarkDoneTask(taskIndex)}>
                     {isDone && <FontAwesomeIcon className='task_check' icon={faCheck}/>}
                 </div>
-                <div className='task_name-wrapper'>
-                    <span
-                        className={isEditing ? "task_name task_name--inactive" : "task_name"}
-                    >
-                        {task_name}
-                    </span>
-                    <input
-                        className={isEditing ? "task_edit" : "task_edit task_edit--inactive"}
-                        ref={editInput}
-                        value={edit}
-                        spellCheck='false'
-                        onBlur={() => {
-                            setIsEditing(false);
-                        }}
-                        onKeyDown={e => {
-                            if (e.keyCode === 13) {
+                <div className="task_content">
+                    <div className='task_name-wrapper'>
+                        <span
+                            className={isEditing ? "task_name task_name--inactive" : "task_name"}
+                        >
+                            {task_name}
+                        </span>
+                        <input
+                            className={isEditing ? "task_edit" : "task_edit task_edit--inactive"}
+                            ref={editInput}
+                            value={edit}
+                            spellCheck='false'
+                            onBlur={() => {
                                 setIsEditing(false);
-                                editInput.current.blur();
-                            }
-                        }}
-                        onChange={e => setEdit(e.target.value)}
-                    />
+                            }}
+                            onKeyDown={e => {
+                                if (e.keyCode === 13) {
+                                    setIsEditing(false);
+                                    editInput.current.blur();
+                                }
+                            }}
+                            onChange={e => setEdit(e.target.value)}
+                        />
+                    </div>
+                    {dateValue && <div className="task_date-time">{dateValue}</div>}
                 </div>
                 <div className={isEditing || iconDisplay || menuToggle ? "task_icon-section" : "task_icon-section opacity-0"}>
                     <FontAwesomeIcon
@@ -177,7 +184,7 @@ export default function Task({
                     <div className="task_date task_date-and-time_item">
                         <div className="task_menu_title task_date-and-time_title">
                             <div className="task_date-and-time_checkbox">
-                                {date !== '' && <div className="task_date-and-time_checkbox_inner">
+                                {true && <div className="task_date-and-time_checkbox_inner">
                                     <FontAwesomeIcon className='task_date-and-time_checkbox_tick' icon={faCheck} />
                                 </div>}
                             </div>
@@ -185,16 +192,16 @@ export default function Task({
                             <span>Date</span>
                         </div>
                         <div
-                            className={date === '' ? "task_date-and-time_value" : "task_date-and-time_value invisible"}
-                            onClick={() => handleToggleDateTimeModal(taskIndex)}
+                            className={true ? "task_date-and-time_value" : "task_date-and-time_value invisible"}
+                            onClick={() => handleOpenDateTimeModal(taskIndex)}
                         >
-                            <span>{date}</span>
+                            <span>{date && dateValue}</span>
                         </div>
                     </div>
                     <div className="task_time task_date-and-time_item">
                         <div className="task_menu_title task_date-and-time_title">
                             <div className="task_date-and-time_checkbox">
-                                {time !== '' && <div className="task_date-and-time_checkbox_inner">
+                                {true && <div className="task_date-and-time_checkbox_inner">
                                     <FontAwesomeIcon className='task_date-and-time_checkbox_tick' icon={faCheck} />
                                 </div>}
                             </div>
@@ -202,8 +209,8 @@ export default function Task({
                             <span>Time</span>
                         </div>
                         <div
-                            className={time !== '' ? "task_date-and-time_value" : "task_date-and-time_value invisible"}
-                            onClick={() => handleToggleDateTimeModal(taskIndex)}
+                            className={true ? "task_date-and-time_value" : "task_date-and-time_value invisible"}
+                            onClick={() => handleOpenDateTimeModal(taskIndex)}
                         >
                             <span>{time}</span>
                         </div>

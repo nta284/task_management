@@ -19,7 +19,7 @@ export default function Category({
         editTask,
         editTaskBgColor,
         editTaskDescription,
-        toggleDateTimeModal
+        openDateTimeModal
     } = taskListHandle;
 
     const [taskInput, setTaskInput] = useState('');
@@ -27,20 +27,6 @@ export default function Category({
 
     const addTaskInput = useRef(null);
     const addTaskInputSection = useRef(null);
-
-    function activateAddTaskInput(e) {
-        setAddTaskActive(true);
-        setTimeout(() => {
-            addTaskInput.current.focus();
-        }, 0);
-    }
-
-    function deactivateAddTaskInput(e) {
-        if (!addTaskInputSection.current.contains(e.target)) {
-            setAddTaskActive(false);
-            setTaskInput('');
-        }
-    }
 
     const taskHandle = {
         handleDeleteTask(taskIndex) {
@@ -63,8 +49,8 @@ export default function Category({
             editTaskDescription(catIndex, taskIndex, descriptionValue);
         },
 
-        handleToggleDateTimeModal(taskIndex) {
-            toggleDateTimeModal(catIndex, taskIndex);
+        handleOpenDateTimeModal(taskIndex) {
+            openDateTimeModal(catIndex, taskIndex);
         }
     }
 
@@ -76,6 +62,21 @@ export default function Category({
         }
     }
 
+    function activateAddTaskInput(e) {
+        setAddTaskActive(true);
+        setTimeout(() => {
+            addTaskInput.current.focus();
+        }, 0);
+    }
+
+    function deactivateAddTaskInput(e) {
+        if (!addTaskInputSection.current.contains(e.target)) {
+            setAddTaskActive(false);
+            setTaskInput('');
+        }
+    }
+
+    // Trigger deactivateAddTaskInput when click outside
     useEffect(() => {
         window.addEventListener('click', deactivateAddTaskInput);
 

@@ -9,13 +9,16 @@ import Category from './components/Category';
 import colors from './colors';
 
 function App() {
-
     const [catInput, setCatInput] = useState('');
     const [addCatActive, setAddCatActive] = useState(false);
 
     const [toggleModal, setToggleModal] = useState(false);
     const [date, setDate] = useState(new Date());
     const [time, setTime] = useState('');
+    const [targetIndex, setTargetIndex] = useState({
+        catIndex: null,
+        taskIndex: null
+    })
 
     const addCatInput = useRef(null);
     const addCatInputSection = useRef(null);
@@ -73,7 +76,7 @@ function App() {
                                 isDeleted: false,
                                 bgColor: colors[Math.floor(Math.random() * colors.length)],
                                 description: '',
-                                date: '',
+                                date: null,
                                 time: ''
                             }
                         ]
@@ -181,6 +184,24 @@ function App() {
                     ...taskList.slice(action.payload.catIndex + 1)
                 ]
 
+            case 'EDIT_TASK_DATE_TIME':
+                return [
+                    ...taskList.slice(0, action.payload.catIndex),
+                    {
+                        ...taskList[action.payload.catIndex],
+                        cat_list: [
+                            ...taskList[action.payload.catIndex].cat_list.slice(0, action.payload.taskIndex),
+                            {
+                                ...taskList[action.payload.catIndex].cat_list[action.payload.taskIndex],
+                                date: action.payload.date,
+                                time: action.payload.time
+                            },
+                            ...taskList[action.payload.catIndex].cat_list.slice(action.payload.taskIndex + 1)
+                        ]
+                    },
+                    ...taskList.slice(action.payload.catIndex + 1)
+                ]
+
             default:
                 return taskList;
         }
@@ -267,8 +288,25 @@ function App() {
             })
         },
 
-        toggleDateTimeModal(catIndex, taskIndex) {
+        openDateTimeModal(catIndex, taskIndex) {
+            setDate(() => {
+                let targetTaskDate = taskList[catIndex].cat_list[taskIndex].date;
+                if (targetTaskDate === null){
+                    return new Date();
+                }
+                return new Date(
+                    targetTaskDate.year,
+                    targetTaskDate.month,
+                    targetTaskDate.day
+                )
+            });
+            setTime(taskList[catIndex].cat_list[taskIndex].time);
+
             setToggleModal(true);
+            setTargetIndex({
+                catIndex,
+                taskIndex
+            });
         }
     }
 
@@ -286,6 +324,23 @@ function App() {
         }
     }
 
+    function setTaskDateTime() {
+        setToggleModal(false);
+        taskListDispatch({
+            type: 'EDIT_TASK_DATE_TIME',
+            payload: {
+                ...targetIndex,
+                date: {
+                    day: date.getDate(),
+                    month: date.getMonth(),
+                    year: date.getFullYear()
+                },
+                time
+            }
+        })
+    }
+
+    // Trigger deactivateAddCatInput when click outside
     useEffect(() => {
         window.addEventListener('click', deactivateAddCatInput);
 
@@ -301,9 +356,6 @@ function App() {
         localStorage.setItem('taskList', tasklistJSON);
     }, [taskList])
 
-    useEffect(() => {
-        console.log(`${date.getDate()}/${date.getMonth()}/${date.getFullYear()} - ${time}`);
-    }, [date, time])
 
     return (
         <div className="App">
@@ -361,7 +413,7 @@ function App() {
                         </div>
                     </div>
                 </div>
-                {toggleModal && <div className="date-and-time-modal" onClick={e => {setToggleModal(false);e.stopPropagation()}}>
+                {toggleModal && <div className="date-and-time-modal" onClick={e => {setTaskDateTime();e.stopPropagation()}}>
                     <div className="date-and-time-modal_container" onClick={e => {e.stopPropagation()}}>
                         <div className="date-and-time-modal_half">
                             <div className="date-and-time-modal_half_title">
@@ -385,7 +437,7 @@ function App() {
                                 onChange={setTime}
                             />
                         </div>
-                        <div className="date-and-time-modal_save-btn" onClick={() => {setToggleModal(false)}}>Save</div>
+                        <div className="date-and-time-modal_save-btn" onClick={setTaskDateTime}>Save</div>
                     </div>
                 </div>}
             </div>

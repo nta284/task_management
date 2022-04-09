@@ -44,63 +44,76 @@
                 font-size: 10rem;
             }
         }
-    
-        .task_name-wrapper {
+
+        .task_content {
+            width: 100%;
             margin-left: 22px;
             flex: 1;
-            position: relative;
-            margin-right: 10px;
-            margin-top: 1px;
-        
-            .task_name {
-                font-size: 1.5rem;
-                line-height: 20px;
-                z-index: 5;
-        
-                &.task_name--inactive {
-                    z-index: -1;
-                    opacity: 0;
+            
+            .task_name-wrapper {
+                position: relative;
+                margin-right: 10px;
+                margin-top: 2px;
+            
+                .task_name {
+                    font-size: 1.5rem;
+                    line-height: 18px;
+                    z-index: 5;
+            
+                    &.task_name--inactive {
+                        z-index: -1;
+                        opacity: 0;
+                    }
+            
+                    &::selection {
+                        background-color: #fff;
+                        color: #333;
+                    }
                 }
-        
-                &::selection {
-                    background-color: #fff;
-                    color: #333;
-                }
-            }
-        
-            .task_edit {
-                position: absolute;
-                width: 100%;
-                top: 0;
-                left: 0;
-                font-size: 1.5rem;
-                line-height: 20px;
-                color: #fff;
-                padding: 0;
-                background-color: transparent;
-                border: none;
-                border-bottom: 1px solid white;
-                outline: none;
-                z-index: 5;
-                cursor: text;
-                
-                &:focus {
+            
+                .task_edit {
+                    position: absolute;
+                    width: 100%;
+                    top: 0;
+                    left: 0;
+                    font-size: 1.5rem;
+                    line-height: 18px;
+                    color: #fff;
+                    padding: 0;
+                    background-color: transparent;
+                    border: none;
+                    border-bottom: 1px solid white;
                     outline: none;
-                }
-                
-                &.task_edit--inactive {
-                    opacity: 0;
-                    z-index: -1;
-                    cursor: default;
+                    z-index: 5;
+                    cursor: text;
+                    
+                    &:focus {
+                        outline: none;
+                    }
+                    
+                    &.task_edit--inactive {
+                        opacity: 0;
+                        z-index: -1;
+                        cursor: default;
+                    }
+            
+                    &::selection {
+                        background-color: #fff;
+                        color: #333;
+                    }
                 }
         
-                &::selection {
-                    background-color: #fff;
-                    color: #333;
-                }
             }
-    
+
+            .task_date-time {
+                font-size: 1.1rem;
+                line-height: 12px;
+                margin: 0;
+                padding: 0;
+                padding: 4px 0 2px;
+            }
         }
+    
     
         .task_icon-section {
             display: flex;
