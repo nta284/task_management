@@ -19,7 +19,7 @@ export default function Category({
         editTask,
         editTaskBgColor,
         editTaskDescription,
-        openDateTimeModal
+        dateTimeHandling
     } = taskListHandle;
 
     const [taskInput, setTaskInput] = useState('');
@@ -49,8 +49,8 @@ export default function Category({
             editTaskDescription(catIndex, taskIndex, descriptionValue);
         },
 
-        handleOpenDateTimeModal(taskIndex) {
-            openDateTimeModal(catIndex, taskIndex);
+        handleDateTime(taskIndex, action) {
+            dateTimeHandling(catIndex, taskIndex, action);
         }
     }
 

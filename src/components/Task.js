@@ -25,7 +25,7 @@ export default function Task({
         handleEditTask,
         handleEditBgColor,
         handleEditTaskDescription,
-        handleOpenDateTimeModal
+        handleDateTime
     } = taskHandle;
 
     const [isEditing, setIsEditing] = useState(false);
@@ -35,8 +35,10 @@ export default function Task({
     const [menuToggle, setMenuToggle] = useState(false);
 
     const [bgColorValue, setBgColorValue] = useState(bgColor);
-    // const [bgColorValue, setBgColorValue] = useState('linear-gradient(90deg, #640b39, #570530)');
     const [descriptionValue, setDescriptionValue] = useState(description);
+
+    const [dateActive, setDateActive] = useState(date !== null);
+    const [timeActive, setTimeActive] = useState(time !== null);
 
     const editInput = useRef(null);
     const task = useRef(null);
@@ -72,6 +74,36 @@ export default function Task({
         }
     }
 
+    function toggleDate() {
+        if (!dateActive) {
+            setDateActive(true);
+            handleDateTime(taskIndex, 'SET_DATE');
+        }
+        else {
+            setDateActive(false);
+            setTimeActive(false);
+            handleDateTime(taskIndex, 'CLEAR_DATE');
+        }
+    }
+
+    function toggleTime() {
+        if (!timeActive) {
+            setDateActive(true);
+            setTimeActive(true);
+            handleDateTime(taskIndex, 'SET_TIME');
+        }
+        else {
+            setTimeActive(false);
+            handleDateTime(taskIndex, 'CLEAR_TIME');
+        }
+    }
+
+    useEffect(() => {
+        if (!time) {
+            setTimeActive(false);
+        }
+    }, [time])
+
     // Trigger deactivateMenu when click outside
     useEffect(() => {
         window.addEventListener('click', deactivateMenu);
@@ -91,7 +123,7 @@ export default function Task({
         >
             <div className="task-wrapper" style={{background: bgColor}}>
                 <div className="task_checkbox" onClick={() => handleMarkDoneTask(taskIndex)}>
-                    {isDone && <FontAwesomeIcon className='task_check' icon={faCheck}/>}
+                    <FontAwesomeIcon className={isDone ? 'task_check' : 'task_check invisible'} icon={faCheck}/>
                 </div>
                 <div className="task_content">
                     <div className='task_name-wrapper'>
@@ -117,7 +149,7 @@ export default function Task({
                             onChange={e => setEdit(e.target.value)}
                         />
                     </div>
-                    {dateValue && <div className="task_date-time">{dateValue}</div>}
+                    {date && <div className="task_date-time">{time && `${time}, `}{dateValue && dateValue}</div>}
                 </div>
                 <div className={isEditing || iconDisplay || menuToggle ? "task_icon-section" : "task_icon-section opacity-0"}>
                     <FontAwesomeIcon
@@ -183,34 +215,34 @@ export default function Task({
                 <div className="task_date-and-time">
                     <div className="task_date task_date-and-time_item">
                         <div className="task_menu_title task_date-and-time_title">
-                            <div className="task_date-and-time_checkbox">
-                                {true && <div className="task_date-and-time_checkbox_inner">
+                            <div className="task_date-and-time_checkbox" onClick={toggleDate}>
+                                <div className={dateActive ? "task_date-and-time_checkbox_inner" : "task_date-and-time_checkbox_inner invisible"}>
                                     <FontAwesomeIcon className='task_date-and-time_checkbox_tick' icon={faCheck} />
-                                </div>}
+                                </div>
                             </div>
                             <FontAwesomeIcon icon={faCalendarDays} className='task_menu_icon'/>
                             <span>Date</span>
                         </div>
                         <div
-                            className={true ? "task_date-and-time_value" : "task_date-and-time_value invisible"}
-                            onClick={() => handleOpenDateTimeModal(taskIndex)}
+                            className={dateActive ? "task_date-and-time_value" : "task_date-and-time_value invisible"}
+                            onClick={() => handleDateTime(taskIndex, 'SET_DATE')}
                         >
                             <span>{date && dateValue}</span>
                         </div>
                     </div>
                     <div className="task_time task_date-and-time_item">
                         <div className="task_menu_title task_date-and-time_title">
-                            <div className="task_date-and-time_checkbox">
-                                {true && <div className="task_date-and-time_checkbox_inner">
+                            <div className="task_date-and-time_checkbox" onClick={toggleTime}>
+                                <div className={timeActive ? "task_date-and-time_checkbox_inner" : "task_date-and-time_checkbox_inner invisible"}>
                                     <FontAwesomeIcon className='task_date-and-time_checkbox_tick' icon={faCheck} />
-                                </div>}
+                                </div>
                             </div>
                             <FontAwesomeIcon icon={faClock} className='task_menu_icon'/>
                             <span>Time</span>
                         </div>
                         <div
-                            className={true ? "task_date-and-time_value" : "task_date-and-time_value invisible"}
-                            onClick={() => handleOpenDateTimeModal(taskIndex)}
+                            className={timeActive ? "task_date-and-time_value" : "task_date-and-time_value invisible"}
+                            onClick={() => handleDateTime(taskIndex, 'SET_TIME')}
                         >
                             <span>{time}</span>
                         </div>

@@ -77,7 +77,7 @@ function App() {
                                 bgColor: colors[Math.floor(Math.random() * colors.length)],
                                 description: '',
                                 date: null,
-                                time: ''
+                                time: null
                             }
                         ]
                     },
@@ -288,25 +288,90 @@ function App() {
             })
         },
 
-        openDateTimeModal(catIndex, taskIndex) {
-            setDate(() => {
-                let targetTaskDate = taskList[catIndex].cat_list[taskIndex].date;
-                if (targetTaskDate === null){
-                    return new Date();
-                }
-                return new Date(
-                    targetTaskDate.year,
-                    targetTaskDate.month,
-                    targetTaskDate.day
-                )
-            });
-            setTime(taskList[catIndex].cat_list[taskIndex].time);
-
-            setToggleModal(true);
+        dateTimeHandling(catIndex, taskIndex, action) {
             setTargetIndex({
                 catIndex,
                 taskIndex
             });
+
+            if (action === 'SET_DATE') {
+                setDate(() => {
+                    let targetTaskDate = taskList[catIndex].cat_list[taskIndex].date;
+                    if (targetTaskDate === null){
+                        return new Date();
+                    }
+                    return new Date(
+                        targetTaskDate.year,
+                        targetTaskDate.month,
+                        targetTaskDate.day
+                    )
+                });
+    
+                setToggleModal(true);
+            }
+            else if (action === 'SET_TIME') {
+                setDate(() => {
+                    let targetTaskDate = taskList[catIndex].cat_list[taskIndex].date;
+                    if (targetTaskDate === null){
+                        return new Date();
+                    }
+                    return new Date(
+                        targetTaskDate.year,
+                        targetTaskDate.month,
+                        targetTaskDate.day
+                    )
+                });
+                setTime(() => {
+                    if (!taskList[catIndex].cat_list[taskIndex].time) {
+                        return '12:00';
+                    }
+                    return taskList[catIndex].cat_list[taskIndex].time;
+                });
+    
+                setToggleModal(true);
+            }
+            else if (action === 'CLEAR_DATE' || action === 'CLEAR_TIME') {
+                setTime('');
+                setTaskDateTime(action);
+            }
+        }
+    }
+
+    function setTaskDateTime(action) {
+        if (action === 'SET') {
+            setToggleModal(false);
+            taskListDispatch({
+                type: 'EDIT_TASK_DATE_TIME',
+                payload: {
+                    ...targetIndex,
+                    date: {
+                        day: date.getDate(),
+                        month: date.getMonth(),
+                        year: date.getFullYear()
+                    },
+                    time
+                }
+            })
+        }
+        else if (action === 'CLEAR_DATE') {
+            taskListDispatch({
+                type: 'EDIT_TASK_DATE_TIME',
+                payload: {
+                    ...targetIndex,
+                    date: null,
+                    time: null
+                }
+            })
+        }
+        else if (action === 'CLEAR_TIME') {
+            taskListDispatch({
+                type: 'EDIT_TASK_DATE_TIME',
+                payload: {
+                    ...targetIndex,
+                    date: taskList[targetIndex.catIndex].cat_list[targetIndex.taskIndex].date,
+                    time: null
+                }
+            })
         }
     }
 
@@ -322,22 +387,6 @@ function App() {
             setAddCatActive(false);
             setCatInput('');
         }
-    }
-
-    function setTaskDateTime() {
-        setToggleModal(false);
-        taskListDispatch({
-            type: 'EDIT_TASK_DATE_TIME',
-            payload: {
-                ...targetIndex,
-                date: {
-                    day: date.getDate(),
-                    month: date.getMonth(),
-                    year: date.getFullYear()
-                },
-                time
-            }
-        })
     }
 
     // Trigger deactivateAddCatInput when click outside
@@ -413,7 +462,7 @@ function App() {
                         </div>
                     </div>
                 </div>
-                {toggleModal && <div className="date-and-time-modal" onClick={e => {setTaskDateTime();e.stopPropagation()}}>
+                {toggleModal && <div className="date-and-time-modal" onClick={e => {setTaskDateTime('SET');e.stopPropagation()}}>
                     <div className="date-and-time-modal_container" onClick={e => {e.stopPropagation()}}>
                         <div className="date-and-time-modal_half">
                             <div className="date-and-time-modal_half_title">
@@ -426,18 +475,16 @@ function App() {
                         </div>
                         <div className="date-and-time-modal_half">
                             <div className="date-and-time-modal_half_title">
-                                Time
+                                Time (Optional)
                             </div>
                             <TimePicker
                                 value={time}
-                                amPmAriaLabel="Select AM/PM"
-                                format="h:m a"
                                 clockIcon={<FontAwesomeIcon icon={faClock} />}
                                 clearIcon={<FontAwesomeIcon icon={faXmark} className='x-mark'/>}
                                 onChange={setTime}
                             />
                         </div>
-                        <div className="date-and-time-modal_save-btn" onClick={setTaskDateTime}>Save</div>
+                        <div className="date-and-time-modal_save-btn" onClick={() => setTaskDateTime('SET')}>Save</div>
                     </div>
                 </div>}
             </div>

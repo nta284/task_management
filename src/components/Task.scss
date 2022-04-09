@@ -111,6 +111,14 @@
                 margin: 0;
                 padding: 0;
                 padding: 4px 0 2px;
+                // padding-left: 4px;
+                // padding-right: 4px;
+                // background-color: #fff;
+                // font-weight: 500;
+                // width: fit-content;
+                // color: #333;
+                // border-radius: 2px;
+                // color: rgb(227, 28, 28);
             }
         }
     
@@ -318,11 +326,11 @@
 
             .task_date-and-time_item {
                 &.task_date {
-                    width: 55%;
+                    width: 49%;
                 }
 
                 &.task_time {
-                    width: 43%;
+                    width: 48%;
                 }
 
                 .task_date-and-time_title {
