@@ -7,7 +7,7 @@ import {  faPlus, faGear, faMagnifyingGlass, faClock, faXmark } from '@fortaweso
 import Calendar from 'react-calendar';
 import TimePicker from 'react-time-picker/dist/entry.nostyle';
 import './components/Calendar-and-Clock.scss';
-import { SettingsContext } from './SettingsContext';
+import { SettingsContext } from './context/SettingsContext';
 import { nanoid } from 'nanoid';
 import Header from './components/Header';
 
@@ -26,7 +26,7 @@ function App() {
     const addCatInput = useRef(null);
     const addCatInputSection = useRef(null);
 
-    const { lang, theme } = useContext(SettingsContext);
+    const { lang } = useContext(SettingsContext);
 
     // useReducer for taskList
     const initTaskList = [];

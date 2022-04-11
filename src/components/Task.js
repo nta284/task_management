@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faPenToSquare, faEllipsisVertical, faPalette, faShuffle, faClipboard, faCalendarDays, faClock } from '@fortawesome/free-solid-svg-icons';
 import './Task.scss';
 import { taskColors } from '../colors';
-import { SettingsContext } from '../SettingsContext';
+import { SettingsContext } from '../context/SettingsContext';
 
 export default function Task({
     taskIndex,

@@ -3,8 +3,8 @@ import './Category.scss';
 import Task from './Task';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {  faTrashCan, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { SettingsContext } from '../SettingsContext';
-import { FilterContext } from '../FilterContext';
+import { SettingsContext } from '../context/SettingsContext';
+import { FilterContext } from '../context/FilterContext';
 
 export default function Category({
     catIndex,

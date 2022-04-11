@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import './Header.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faGear, faLanguage, faBrush, faAngleDown, faRandom } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faGear, faLanguage, faBrush, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import vietnamFlag from '../img/vietnam.png';
 import usaFlag from '../img/united-states.png';
-import { SettingsContext } from '../SettingsContext';
-import { FilterContext } from '../FilterContext';
+import { SettingsContext } from '../context/SettingsContext';
+import { FilterContext } from '../context/FilterContext';
 import { themeColors } from '../colors';
 
 export default function Header() {
@@ -14,7 +14,7 @@ export default function Header() {
     const { filterMenu } = useContext(FilterContext);
     const { isDeleted, isDone, changeIsDeleted } = filterMenu;
 
-    const [settingsToggle, setSettingsToggle] = useState(true);
+    const [settingsToggle, setSettingsToggle] = useState(false);
     const [langDropdownToggle, setLangDropdownToggle] = useState(false);
 
     const settings = useRef(null);
@@ -46,7 +46,7 @@ export default function Header() {
         const selectedTheme = themeColors.find(ele => ele.name === theme);
 
         const root = document.documentElement;
-        
+
         root?.style.setProperty("--primary-color", selectedTheme.palette['primary']);
         root?.style.setProperty("--dark-color", selectedTheme.palette['dark']);
         root?.style.setProperty("--light-color", selectedTheme.palette['light']);
