@@ -1,19 +1,20 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import './Header.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faGear, faLanguage, faBrush, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faGear, faLanguage, faBrush, faAngleDown, faRandom } from '@fortawesome/free-solid-svg-icons';
 import vietnamFlag from '../img/vietnam.png';
 import usaFlag from '../img/united-states.png';
 import { SettingsContext } from '../SettingsContext';
 import { FilterContext } from '../FilterContext';
+import { themeColors } from '../colors';
 
 export default function Header() {
-    const { lang, theme, setLang, changeTheme } = useContext(SettingsContext);
+    const { lang, theme, setLang, setTheme } = useContext(SettingsContext);
 
     const { filterMenu } = useContext(FilterContext);
     const { isDeleted, isDone, changeIsDeleted } = filterMenu;
 
-    const [settingsToggle, setSettingsToggle] = useState(false);
+    const [settingsToggle, setSettingsToggle] = useState(true);
     const [langDropdownToggle, setLangDropdownToggle] = useState(false);
 
     const settings = useRef(null);
@@ -31,10 +32,6 @@ export default function Header() {
         }
     }
 
-    function activateLangOptions() {
-        
-    }
-
     useEffect(() => {
         window.addEventListener('click', deactivateSettings);
         window.addEventListener('click', deactivateLangOptions);
@@ -44,6 +41,18 @@ export default function Header() {
             window.removeEventListener('click', deactivateLangOptions);
         }
     }, [])
+
+    useEffect(() => {
+        const selectedTheme = themeColors.find(ele => ele.name === theme);
+
+        const root = document.documentElement;
+        
+        root?.style.setProperty("--primary-color", selectedTheme.palette['primary']);
+        root?.style.setProperty("--dark-color", selectedTheme.palette['dark']);
+        root?.style.setProperty("--light-color", selectedTheme.palette['light']);
+        root?.style.setProperty("--lightest-color", selectedTheme.palette['lightest']);
+    }, [theme])
+
 
     return (
         <div className="header">
@@ -120,6 +129,17 @@ export default function Header() {
                                 <span>
                                     {lang === 'VN' ? 'Thay đổi màu nền' : 'Change background'}
                                 </span>
+                            </div>
+                            <div className="settings_menu_theme_select">
+                                {themeColors.map(ele => (
+                                    <div
+                                        key={ele.name}
+                                        className={ele.name === theme ? "settings_menu_theme_option theme--selecting" : "settings_menu_theme_option"}
+                                        onClick={() => setTheme(ele.name)}
+                                    >
+                                        <div style={{backgroundColor: ele.palette['primary']}} className="settings_menu_theme_option_inner"></div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>

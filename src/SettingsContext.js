@@ -4,15 +4,13 @@ const SettingsContext = createContext();
 
 function SettingsProvider({ children }) {
     const [lang, setLang] = useState('VN');
-    const [theme, setTheme] = useState('blue');
+    const [theme, setTheme] = useState('theme-green');
 
     const settingsContext = {
         lang,
         theme,
         setLang,
-        changeTheme() {
-
-        }
+        setTheme
     }
 
     return (

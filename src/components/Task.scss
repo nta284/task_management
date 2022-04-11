@@ -1,6 +1,6 @@
 
-$primary-background-color: #0079BF;
-$header-background-color: #006199;
+$primary-color: #0079BF;
+$dark-color: #006199;
 
 .task {
     position: relative;
@@ -121,7 +121,6 @@ $header-background-color: #006199;
             }
         }
     
-    
         .task_icon-section {
             display: flex;
             align-items: center;
@@ -193,7 +192,6 @@ $header-background-color: #006199;
             padding: 8px 10px 0;
             
             .task_color_option-list {
-                // margin-top: 5px;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;

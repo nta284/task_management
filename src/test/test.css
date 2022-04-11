@@ -8,3 +8,10 @@
     color: linear-gradient(90deg, #eb4f7b, #eb4a77);
     color: linear-gradient(90deg, #6c0f4d, #650a47);
 }
+
+:root {
+    --primary-color: #04b39e;
+    --dark-color: #029281;
+    --light-color: #0cc9b3;
+    --lightest-color: #0dd0b9;
+}

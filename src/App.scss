@@ -1,7 +1,4 @@
 
-$primary-background-color: #0079BF;
-$header-background-color: #006199;
-
 $input-border-radius: 5px;
 $input-height: 40px;
 $input-font-size: 1.38rem;
@@ -16,7 +13,7 @@ $input-box-shadow: rgba(88, 92, 95, 0.2) 0px 0px 15px;
         overflow-y: hidden;
         
         .tasklist-section {
-            background-color: $primary-background-color;
+            background-color: var(--primary-color);
             height: 100%;
             min-width: 100vw;
             width: max-content;
@@ -31,13 +28,13 @@ $input-box-shadow: rgba(88, 92, 95, 0.2) 0px 0px 15px;
             .add-section.add-cat-section {
                 .add-activate-btn.add-cat-activate-btn {
                     width: 300px;
-                    background-color: #329bd8;
+                    background-color: var(--light-color);
                     color: #fff;
                     height: 42px;
                     border-radius: 5px;
                     
                     &:hover {
-                        background-color: #47a5dc;
+                        background-color: var(--lightest-color);
                     }
                 }
                 
@@ -48,17 +45,14 @@ $input-box-shadow: rgba(88, 92, 95, 0.2) 0px 0px 15px;
                     input {
                         border-top-left-radius: 5px;
                         border-bottom-left-radius: 5px;
-                        border-color: #006199;
+                        border-color: var(--primary-color);
                         font-size: 1.5rem;
-                        // background-color: transparent;
-                        // color: #fff;
                     }
                     
                     button {
-                        background-color: #006199;
+                        background-color: var(--primary-color);
                         padding: 0 15px;
                         font-size: 1.5rem;
-                        // color: #333;
                     }
                 }
             }
@@ -115,11 +109,11 @@ $input-box-shadow: rgba(88, 92, 95, 0.2) 0px 0px 15px;
 }
 
 ::-webkit-scrollbar {
-    background-color: $primary-background-color;
+    background-color: var(--primary-color);
     height: 1.5rem;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: $header-background-color;
+    background-color: var(--dark-color);
     border-radius: 0.75rem;
 }

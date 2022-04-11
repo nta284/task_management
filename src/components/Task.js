@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faPenToSquare, faEllipsisVertical, faPalette, faShuffle, faClipboard, faCalendarDays, faClock } from '@fortawesome/free-solid-svg-icons';
 import './Task.scss';
-import colors from '../colors';
+import { taskColors } from '../colors';
 import { SettingsContext } from '../SettingsContext';
 
 export default function Task({
@@ -179,7 +179,7 @@ export default function Task({
                         <span>{lang === 'VN' ? 'Chọn màu sắc:' : 'Choose Color:'}</span>
                     </div>
                     <div className="task_color_option-list">
-                        {colors.map((ele, index) => (
+                        {taskColors.map((ele, index) => (
                             <div
                                 key={index}
                                 className={bgColorValue === ele ? "task_color_select task_color_select--selecting" : "task_color_select"}
@@ -191,9 +191,9 @@ export default function Task({
                         <div 
                             className="task_color_random-btn"
                             onClick={() => {
-                                let newColor = colors[Math.floor(Math.random() * colors.length)];
+                                let newColor = taskColors[Math.floor(Math.random() * taskColors.length)];
                                 while (newColor === currentBgColor.current) {
-                                    newColor = colors[Math.floor(Math.random() * colors.length)];
+                                    newColor = taskColors[Math.floor(Math.random() * taskColors.length)];
                                 }
                                 setBgColorValue(newColor);
                             }}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer, useRef, useContext } from 'react';
 import './App.scss';
 import Category from './components/Category';
-import colors from './colors';
+import { taskColors } from './colors';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {  faPlus, faGear, faMagnifyingGlass, faClock, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Calendar from 'react-calendar';
@@ -106,7 +106,7 @@ function App() {
                                 task_name: action.payload.taskValue,
                                 isDone: false,
                                 isDeleted: false,
-                                bgColor: colors[Math.floor(Math.random() * colors.length)],
+                                bgColor: taskColors[Math.floor(Math.random() * taskColors.length)],
                                 description: '',
                                 date: null,
                                 time: null

@@ -1,9 +1,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;440;500;510&display=swap');
 
-$primary-background-color: #0079BF;
-$header-background-color: #006199;
-
 * {
     box-sizing: border-box;
     z-index: inherit;
@@ -87,7 +84,7 @@ input {
             flex: 1;
             font-size: 1.5rem;
             border: none;
-            border: 2px solid $primary-background-color;
+            border: 2px solid var(--primary-color);
             border-right: none;
             outline: none;
             padding: 0 10px;
@@ -96,13 +93,15 @@ input {
             
             &:focus {
                 outline: none;
-                border-color: #0068a3;
+                border-color: var(--dark-color);
+                opacity: 0.95;
             }
         }
         
         .add-btn {
             border: none;
-            background-color: #0068a3;
+            background-color: var(--dark-color);
+            opacity: 0.95;
             color: #fff;
             padding: 0 10px;
             border-top-right-radius: 3px;
@@ -110,7 +109,7 @@ input {
             cursor: pointer;
     
             &:hover {
-                background-color: $header-background-color;
+                opacity: 1;
             }
         }
     }

@@ -60,9 +60,11 @@ export default function Category({
     }
 
     function handleAddTaskFromCat() {
-        setTaskInput('');
         addTaskInput.current.focus();
-        addTask(catIndex, taskInput);
+        if (taskInput !== '') {
+            setTaskInput('');
+            addTask(catIndex, taskInput);
+        }
     }
 
     function activateAddTaskInput(e) {
