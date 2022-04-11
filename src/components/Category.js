@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {  faTrashCan, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import './Category.scss';
 import Task from './Task';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {  faTrashCan, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { SettingsContext } from '../SettingsContext';
+import { FilterContext } from '../FilterContext';
 
 export default function Category({
     catIndex,
@@ -27,6 +29,9 @@ export default function Category({
 
     const addTaskInput = useRef(null);
     const addTaskInputSection = useRef(null);
+
+    const { lang } = useContext(SettingsContext);
+    const { catListFilter } = useContext(FilterContext);
 
     const taskHandle = {
         handleDeleteTask(taskIndex) {
@@ -57,9 +62,7 @@ export default function Category({
     function handleAddTaskFromCat() {
         setTaskInput('');
         addTaskInput.current.focus();
-        if (!cat_list.some(ele => ele.task_name === taskInput)) {
-            addTask(catIndex, taskInput);
-        }
+        addTask(catIndex, taskInput);
     }
 
     function activateAddTaskInput(e) {
@@ -116,8 +119,8 @@ export default function Category({
             <div className='category_list'>
                 {cat_list.map((task, index) => {
                     return (
-                        task.isDeleted || <Task
-                            key={`${cat_name}-${task.task_name}`}
+                        catListFilter(task) && <Task
+                            key={task.id}
                             className='task'
                             taskIndex={index}
                             task={task}
@@ -135,7 +138,7 @@ export default function Category({
                         className="add-activate_icon"
                         icon={faPlus}
                     />
-                    <span>Add a task</span>
+                    <span>{lang === 'VN' ? 'Thêm công việc' : 'Add a task'}</span>
                 </div>
                 <div className={addTaskActive ? "add-input-section add-task-input-section" : "add-input-section add-task-input-section add-input-section--inactive"}>
                     <input
@@ -144,7 +147,7 @@ export default function Category({
                         ref={addTaskInput}
                         type="text"
                         spellCheck='false'
-                        placeholder='Enter task name...'
+                        placeholder={lang === 'VN' ? 'Nhập tên công việc...' : 'Enter task name...'}
                         onChange={(e) => setTaskInput(e.target.value)}
                         onKeyDown={e => {
                             if (e.keyCode === 13) {
@@ -156,7 +159,7 @@ export default function Category({
                         className='add-btn'
                         onClick={handleAddTaskFromCat}
                     >
-                        Add
+                        {lang === 'VN' ? 'Thêm' : 'Add'}
                     </button>
                 </div>
             </div>

@@ -1,0 +1,214 @@
+
+$primary-background-color: #0079BF;
+$header-background-color: #006199;
+
+$settings-border-radius: 3px;
+        
+.header {
+    position: fixed;
+    height: 50px;
+    width: 100%;
+    background-color: $header-background-color;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 20;
+
+    .header_page-name {
+        flex: 1;
+        font-size: 2rem;
+        color: #fff;
+    }
+
+    .header_search-wrapper {
+        height: 36px;
+        width: 300px;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        border-radius: 5px;
+        margin-right: 5px;
+
+        .header_search-icon {
+            font-size: 2rem;
+            color: #666;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        input {
+            height: 100%;
+            flex: 1;
+            border: none;
+            outline: none;
+            line-height: 20px;
+            font-size: 1.4rem;
+            color: #555;
+
+            &:hover {
+                outline: none;
+            }
+        }
+    }
+
+    .settings {
+        margin-top: 5px;
+        margin-right: -16px;
+        
+        .settings-wrapper {
+            padding: 6px 18px 10px;
+            background-color: transparent;
+            border-radius: 0;
+            
+            &.settings-wrapper--active {
+                background-color: #fff;
+                border-top-left-radius: $settings-border-radius;
+                border-top-right-radius: $settings-border-radius;
+                
+                .setting-icon {
+                    color: #555;
+                }
+            }
+        }
+        
+        .setting-icon {
+            font-size: 2.5rem;
+            color: #fff;
+            cursor: pointer;
+        }
+        
+        .settings_menu {
+            position: absolute;
+            width: 300px;
+            // height: 200px;
+            top: 45px;
+            right: 4px;
+            background-color: #fff;
+            border-radius: $settings-border-radius;
+            border-top-right-radius: 0px;
+            box-shadow: rgba(0, 0, 0, 0.4) 0 0 12px 0;
+            z-index: -1;
+            padding: 15px;
+
+            .settings_menu_header {
+                text-align: center;
+                padding-bottom: 10px;
+                font-size: 1.8rem;
+                font-weight: 500;
+                border-bottom: 1px solid #ccc;
+            }
+
+            .settings_menu_container {
+                .settings_menu_part {
+                    margin: 15px 0;
+                    padding: 0 8px;
+
+                    &:last-child {
+                        margin-bottom: 5px;
+                    }
+
+                    .settings_menu_part_title {
+                        display: flex;
+                        align-items: center;
+    
+                        .settings_menu_part_title_icon {
+                            width: 20px;
+                            font-size: 1.7rem;
+                            margin-right: 5px;
+                        }
+    
+                        span {
+                            font-size: 1.4rem;
+                            font-weight: 500;
+                        }
+                    }
+                }
+
+                .settings_menu_language {
+                    display: flex;
+                    align-items: center;
+                    z-index: 10;
+
+                    .settings_menu_part_title {
+                        span {
+                            width: 65px;
+                        }
+                    }
+
+                    .settings_menu_language_select {
+                        margin-left: 10px;
+                        position: relative;
+                        font-size: 1.3rem;
+
+                        .settings_menu_language_flag {
+                            width: 16px;
+                            margin-right: 5px;
+                            cursor: pointer;
+                        }
+
+                        .settings_menu_language_select-box {
+                            height: 28px;
+                            width: 120px;
+                            padding: 0 8px;
+                            border-radius: 14px;
+                            border: none;
+                            border: 1px solid #ccc;
+                            background-color: rgb(250, 250, 250);
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            cursor: pointer;
+
+                            .settings_menu_language_select-box_text {
+                                display: flex;
+                                align-items: center;
+                            }
+
+                            span {
+                                cursor: pointer;
+                            }
+
+                            &:hover {
+                                background-color: rgb(240, 240, 240);
+                            }
+                        }
+
+                        .settings_menu_language_select_options {
+                            position: absolute;
+                            width: 100%;
+                            top: 105%;
+                            right: 0;
+                            border-radius: 3px;
+                            background-color: rgb(240, 240, 240);
+                            border: 1px solid #ccc;
+                            padding: 4px 0;
+                            
+                            .settings_menu_language_select_option-item {
+                                width: 100%;
+                                height: 28px;
+                                cursor: pointer;
+                                background-color: rgb(240, 240, 240);
+                                display: flex;
+                                align-items: center;
+                                padding-left: 8px;
+
+                                span {
+                                    cursor: pointer;
+                                }
+
+                                &:hover {
+                                    background-color: #fff;
+                                }
+
+                                &.selecting-lang {
+                                    background-color: #fff;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

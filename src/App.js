@@ -1,12 +1,15 @@
-import React, { useState, useEffect, useReducer, useRef } from 'react';
+import React, { useState, useEffect, useReducer, useRef, useContext } from 'react';
 import './App.scss';
+import Category from './components/Category';
+import colors from './colors';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {  faPlus, faGear, faMagnifyingGlass, faClock, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Calendar from 'react-calendar';
 import TimePicker from 'react-time-picker/dist/entry.nostyle';
 import './components/Calendar-and-Clock.scss';
-import Category from './components/Category';
-import colors from './colors';
+import { SettingsContext } from './SettingsContext';
+import { nanoid } from 'nanoid';
+import Header from './components/Header';
 
 function App() {
     const [catInput, setCatInput] = useState('');
@@ -23,14 +26,41 @@ function App() {
     const addCatInput = useRef(null);
     const addCatInputSection = useRef(null);
 
+    const { lang, theme } = useContext(SettingsContext);
+
     // useReducer for taskList
     const initTaskList = [];
 
     function initializer() {
-        const taskListStorage = localStorage.getItem('taskList');
+        const taskListStorage = JSON.parse(localStorage.getItem('taskList'));
 
-        return JSON.parse(taskListStorage) ?? [
+        // if (taskListStorage !== null && taskListStorage[0].id === null) {
+        //     return taskListStorage.map(cat => {
+        //         return {
+        //             id: nanoid(),
+        //             cat_name: cat.cat_name,
+        //             cat_list: cat.cat_list.map(task => {
+        //                 return {
+        //                     ...task,
+        //                     id: nanoid()
+        //                 }
+        //             })
+        //         }
+        //     })
+        // }
+        // else {
+        //     return [
+        //         {
+        //             id: nanoid(),
+        //             cat_name: "Chung",
+        //             cat_list: []
+        //         }
+        //     ]
+        // }
+
+        return taskListStorage ?? [
             {
+                id: nanoid(),
                 cat_name: "Chung",
                 cat_list: []
             }
@@ -43,12 +73,13 @@ function App() {
         switch(action.type) {
             case 'ADD_CAT':
                 addCatInput.current.focus();
-                if (catInput !== '' && !taskList.some(cat => cat.cat_name === catInput)) {
+                if (catInput !== '') {
                     setCatInput('');
         
                     return [
                         ...taskList,
                         {
+                            id: nanoid(),
                             cat_name: catInput,
                             cat_list: []
                         }
@@ -71,6 +102,7 @@ function App() {
                         cat_list: [
                             ...taskList[action.payload.catIndex].cat_list,
                             {
+                                id: nanoid(),
                                 task_name: action.payload.taskValue,
                                 isDone: false,
                                 isDeleted: false,
@@ -331,13 +363,13 @@ function App() {
                 setToggleModal(true);
             }
             else if (action === 'CLEAR_DATE' || action === 'CLEAR_TIME') {
-                setTime('');
-                setTaskDateTime(action);
+                setTime(null);
+                setTaskDateTime(action, catIndex, taskIndex);
             }
         }
     }
 
-    function setTaskDateTime(action) {
+    function setTaskDateTime(action, catIndex, taskIndex) {
         if (action === 'SET') {
             setToggleModal(false);
             taskListDispatch({
@@ -357,7 +389,8 @@ function App() {
             taskListDispatch({
                 type: 'EDIT_TASK_DATE_TIME',
                 payload: {
-                    ...targetIndex,
+                    catIndex,
+                    taskIndex,
                     date: null,
                     time: null
                 }
@@ -367,8 +400,9 @@ function App() {
             taskListDispatch({
                 type: 'EDIT_TASK_DATE_TIME',
                 payload: {
-                    ...targetIndex,
-                    date: taskList[targetIndex.catIndex].cat_list[targetIndex.taskIndex].date,
+                    catIndex,
+                    taskIndex,
+                    date: taskList[catIndex].cat_list[taskIndex].date,
                     time: null
                 }
             })
@@ -409,18 +443,11 @@ function App() {
     return (
         <div className="App">
             <div className="wrapper">
-                <div className="header">
-                    <div className='header_page-name'>Personal Task Management</div>
-                    <div className="header_search-wrapper">
-                        <FontAwesomeIcon className='header_search-icon' icon={faMagnifyingGlass} />
-                        <input type="text" placeholder='Search for tasks ...' spellCheck='false'/>
-                    </div>
-                    <FontAwesomeIcon className='header_setting-icon' icon={faGear} />
-                </div>
+                <Header />
                 <div className="tasklist-section">
                     {taskList.map((category, index) => (
                         <Category
-                            key={category.cat_name}
+                            key={category.id}
                             catIndex={index}
                             cat_name={category.cat_name}
                             cat_list={category.cat_list}
@@ -436,7 +463,7 @@ function App() {
                                 icon={faPlus}
                                 className="add-activate_icon"
                             />
-                            <span>Add a new category</span>
+                            <span>{lang === 'VN' ? 'Thêm danh mục mới' : 'Add a new category'}</span>
                         </div>
                         <div className={addCatActive ? "add-input-section add-cat-input-section" : "add-input-section add-cat-input-section add-input-section--inactive"}>
                             <input
@@ -445,7 +472,7 @@ function App() {
                                 ref={addCatInput}
                                 type="text"
                                 spellCheck='false'
-                                placeholder='Enter category name...'
+                                placeholder={lang === 'VN' ? 'Nhập tên danh mục...' : 'Enter category name...'}
                                 onChange={(e) => setCatInput(e.target.value)}
                                 onKeyDown={e => {
                                     if (e.keyCode === 13) {
@@ -457,7 +484,7 @@ function App() {
                                 className='add-btn'
                                 onClick={taskListHandle.addCat}
                             >
-                                Add
+                                {lang === 'VN' ? 'Thêm' : 'Add'}
                             </button>
                         </div>
                     </div>
@@ -466,7 +493,7 @@ function App() {
                     <div className="date-and-time-modal_container" onClick={e => {e.stopPropagation()}}>
                         <div className="date-and-time-modal_half">
                             <div className="date-and-time-modal_half_title">
-                                Date
+                                {lang === 'VN' ? 'Ngày' : 'Date'}
                             </div>
                             <Calendar 
                                 value={date}
@@ -475,7 +502,7 @@ function App() {
                         </div>
                         <div className="date-and-time-modal_half">
                             <div className="date-and-time-modal_half_title">
-                                Time (Optional)
+                                {lang === 'VN' ? 'Giờ (Không bắt buộc)' : 'Time (Optional)'}
                             </div>
                             <TimePicker
                                 value={time}
@@ -484,7 +511,9 @@ function App() {
                                 onChange={setTime}
                             />
                         </div>
-                        <div className="date-and-time-modal_save-btn" onClick={() => setTaskDateTime('SET')}>Save</div>
+                        <div className="date-and-time-modal_save-btn" onClick={() => setTaskDateTime('SET')}>
+                            {lang === 'VN' ? 'Lưu' : 'Save'}
+                        </div>
                     </div>
                 </div>}
             </div>

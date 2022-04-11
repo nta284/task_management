@@ -1,8 +1,9 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faPenToSquare, faEllipsisVertical, faPalette, faShuffle, faClipboard, faCalendarDays, faClock } from '@fortawesome/free-solid-svg-icons';
 import './Task.scss';
 import colors from '../colors';
+import { SettingsContext } from '../SettingsContext';
 
 export default function Task({
     taskIndex,
@@ -45,6 +46,8 @@ export default function Task({
     const currentBgColor = useRef();
 
     const dateValue = date !== null ? `${date.day}/${date.month}/${date.year}` : null;
+
+    const { lang } = useContext(SettingsContext);
 
     useLayoutEffect(() => {
         if (!isEditing) {
@@ -173,7 +176,7 @@ export default function Task({
                 <div className="task_color">
                     <div className="task_menu_title task_color_title">
                         <FontAwesomeIcon icon={faPalette} className='task_menu_icon'/>
-                        <span>Choose Color:</span>
+                        <span>{lang === 'VN' ? 'Chọn màu sắc:' : 'Choose Color:'}</span>
                     </div>
                     <div className="task_color_option-list">
                         {colors.map((ele, index) => (
@@ -202,13 +205,13 @@ export default function Task({
                 <div className="task_description">
                     <div className="task_menu_title task_description_title">
                         <FontAwesomeIcon icon={faClipboard} className='task_menu_icon'/>
-                        <span>Description:</span>
+                        <span>{lang === 'VN' ? 'Mô tả:' : 'Description:'}</span>
                     </div>
                     <textarea
                         value={descriptionValue}
                         className='task_description_input'
                         spellCheck='false'
-                        placeholder='Enter description for this task...'
+                        placeholder={lang === 'VN' ? 'Thêm mô tả cho công việc này...' : 'Enter description for this task...'}
                         onChange={(e) => {setDescriptionValue(e.target.value)}}
                     ></textarea>
                 </div>
@@ -221,7 +224,7 @@ export default function Task({
                                 </div>
                             </div>
                             <FontAwesomeIcon icon={faCalendarDays} className='task_menu_icon'/>
-                            <span>Date</span>
+                            <span>{lang === 'VN' ? 'Ngày' : 'Due date'}</span>
                         </div>
                         <div
                             className={dateActive ? "task_date-and-time_value" : "task_date-and-time_value invisible"}
@@ -230,7 +233,7 @@ export default function Task({
                             <span>{date && dateValue}</span>
                         </div>
                     </div>
-                    <div className="task_time task_date-and-time_item">
+                    <div className={dateActive ? "task_time task_date-and-time_item" : "task_time task_date-and-time_item invisible"}>
                         <div className="task_menu_title task_date-and-time_title">
                             <div className="task_date-and-time_checkbox" onClick={toggleTime}>
                                 <div className={timeActive ? "task_date-and-time_checkbox_inner" : "task_date-and-time_checkbox_inner invisible"}>
@@ -238,7 +241,7 @@ export default function Task({
                                 </div>
                             </div>
                             <FontAwesomeIcon icon={faClock} className='task_menu_icon'/>
-                            <span>Time</span>
+                            <span>{lang === 'VN' ? 'Giờ' : 'Time'}</span>
                         </div>
                         <div
                             className={timeActive ? "task_date-and-time_value" : "task_date-and-time_value invisible"}
