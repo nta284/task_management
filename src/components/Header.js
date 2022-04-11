@@ -42,17 +42,6 @@ export default function Header() {
         }
     }, [])
 
-    useEffect(() => {
-        const selectedTheme = themeColors.find(ele => ele.name === theme);
-
-        const root = document.documentElement;
-
-        root?.style.setProperty("--primary-color", selectedTheme.palette['primary']);
-        root?.style.setProperty("--dark-color", selectedTheme.palette['dark']);
-        root?.style.setProperty("--light-color", selectedTheme.palette['light']);
-        root?.style.setProperty("--lightest-color", selectedTheme.palette['lightest']);
-    }, [theme])
-
 
     return (
         <div className="header">

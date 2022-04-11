@@ -3,7 +3,7 @@ import './App.scss';
 import Category from './components/Category';
 import { taskColors } from './colors';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {  faPlus, faGear, faMagnifyingGlass, faClock, faXmark } from '@fortawesome/free-solid-svg-icons';
+import {  faPlus, faClock, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Calendar from 'react-calendar';
 import TimePicker from 'react-time-picker/dist/entry.nostyle';
 import './components/Calendar-and-Clock.scss';
@@ -435,8 +435,8 @@ function App() {
 
     // Save taskList to localStorage
     useEffect(() => {
-        const tasklistJSON = JSON.stringify(taskList);
-        localStorage.setItem('taskList', tasklistJSON);
+        const stringnifiedTaskList = JSON.stringify(taskList);
+        localStorage.setItem('taskList', stringnifiedTaskList);
     }, [taskList])
 
 
