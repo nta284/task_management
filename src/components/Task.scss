@@ -333,37 +333,7 @@ $dark-color: #006199;
                 .task_date-and-time_title {
                     margin-bottom: 3px;
                     
-                    .task_date-and-time_checkbox {
-                        width: 14px;
-                        height: 14px;
-                        border: 1px solid #666;
-                        background-color: rgb(245, 245, 245);
-                        border-radius: 4px;
-                        margin-right: 5px;
-                        margin-top: 1px;
-                        z-index: 2;
-                        cursor: pointer;
-                        position: relative;
-
-                        .task_date-and-time_checkbox_inner {
-                            position: absolute;
-                            width: 14px;
-                            height: 14px;
-                            top: -1px;
-                            left: -1px;
-                            border-radius: inherit;
-                            background-color: #0185d2;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            cursor: pointer;
-
-                            .task_date-and-time_checkbox_tick {
-                                color: #fff;
-                                font-size: 0.9rem;
-                            }
-                        }
-                    }
+                    
                 }
 
                 .task_date-and-time_value {

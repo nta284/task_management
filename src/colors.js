@@ -41,8 +41,8 @@ const themeColors = [
         palette: {
             'primary': '#9165a8',
             'dark': '#715183',
-            'light': '#af8dc0',
-            'lightest': '#b390c4'
+            'light': '#b191c1',
+            'lightest': '#bc9acd'
         }
     },
     {

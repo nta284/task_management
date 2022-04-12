@@ -20,34 +20,167 @@ $theme-option-height: 54px;
         color: #fff;
     }
 
-    .header_search-wrapper {
-        height: 36px;
-        width: 300px;
+    .header_menu {
+        position: absolute;
+        width: 320px;
+        top: 45px;
+        right: 4px;
         background-color: #fff;
-        display: flex;
-        align-items: center;
-        padding: 0 10px;
-        border-radius: 5px;
-        margin-right: 5px;
+        border-radius: $settings-border-radius;
+        border-top-right-radius: 0px;
+        box-shadow: rgba(0, 0, 0, 0.4) 0 0 12px 0;
+        z-index: -1;
+        padding: 15px;
 
-        .header_search-icon {
-            font-size: 2rem;
-            color: #666;
-            cursor: pointer;
-            margin-right: 5px;
+        .header_menu_header {
+            text-align: center;
+            padding-bottom: 10px;
+            font-size: 1.8rem;
+            font-weight: 500;
+            border-bottom: 1px solid #ccc;
         }
 
-        input {
-            height: 100%;
-            flex: 1;
-            border: none;
-            outline: none;
-            line-height: 20px;
-            font-size: 1.4rem;
-            color: #555;
+        .header_menu_container {
+            .header_menu_part {
+                margin: 15px 0;
+                padding: 0 8px;
+
+                &:last-child {
+                    margin-bottom: 5px;
+                }
+
+                .header_menu_part_title {
+                    font-size: 1.4rem;
+                    font-weight: 500;
+                    margin-bottom: 6px;
+                }
+            }
+        }
+    }
+
+    .search-filter {
+        margin-right: 5px;
+
+        .search-filter-wrapper {
+            height: 36px;
+            background-color: var(--light-color);
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+
+            .filter-icon {
+                font-size: 1.5rem;
+                margin-right: 10px;
+            }
+
+            span {
+                font-size: 1.4rem;
+                cursor: pointer;
+
+                &::selection {
+                    background-color: inherit;
+                    color: inherit;
+                }
+            }
 
             &:hover {
-                outline: none;
+                background-color: var(--lightest-color);
+            }
+
+            &.search-filter-wrapper--active {
+                background-color: #fff;
+                color: #555;
+
+                &:hover {
+                    background-color: #fff;
+                }
+            }
+        }
+
+        .search-filter_menu {
+            .search-filter_menu_container {
+                .search-filter_menu_part {
+                    padding: 0;
+                    margin-bottom: 20px;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+
+                    .search-filter_search-wrapper {
+                        height: 36px;
+                        background-color: #fff;
+                        display: flex;
+                        align-items: center;
+                        // padding: 0 10px;
+                        border-radius: 5px;
+                        margin-right: 5px;
+                        border: 2px solid rgba(170, 170, 170, 0.5);
+                        z-index: 2;
+                        
+                        &.search--focus {
+                            border: 2px solid #0079bf;
+                        }
+                
+                        .search-filter_search-icon {
+                            font-size: 2rem;
+                            color: #666;
+                            margin: 0 5px 0 10px;
+                        }
+                
+                        input {
+                            height: 100%;
+                            flex: 1;
+                            border: none;
+                            outline: none;
+                            line-height: 20px;
+                            font-size: 1.4rem;
+                            color: #555;
+                
+                            &:hover {
+                                outline: none;
+                            }
+                        }
+
+                        .search-filter_clear-icon {
+                            font-size: 1.4rem;
+                            color: #666;
+                            cursor: pointer;
+                            margin: 0 8px 0 4px;
+                        }
+                    }
+
+                    .search-filter_select {
+                        margin-top: 8px;
+                        display: flex;
+                        justify-content: space-between;
+
+                        .search-filter_option {
+                            width: 50%;
+                            display: flex;
+                            align-items: center;
+                            z-index: 2;
+                            cursor: pointer;
+
+                            .checkbox {
+                                width: 16px;
+                                height: 16px;
+
+                                .checkbox_tick {
+                                    font-size: 1rem;
+                                }
+                            }
+
+                            span {
+                                font-size: 1.3rem;
+                                cursor: pointer;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -60,6 +193,12 @@ $theme-option-height: 54px;
             padding: 6px 18px 10px;
             background-color: transparent;
             border-radius: 0;
+        
+            .setting-icon {
+                font-size: 2.5rem;
+                color: #fff;
+                cursor: pointer;
+            }
             
             &.settings-wrapper--active {
                 background-color: #fff;
@@ -72,42 +211,9 @@ $theme-option-height: 54px;
             }
         }
         
-        .setting-icon {
-            font-size: 2.5rem;
-            color: #fff;
-            cursor: pointer;
-        }
-        
         .settings_menu {
-            position: absolute;
-            width: 320px;
-            // height: 200px;
-            top: 45px;
-            right: 4px;
-            background-color: #fff;
-            border-radius: $settings-border-radius;
-            border-top-right-radius: 0px;
-            box-shadow: rgba(0, 0, 0, 0.4) 0 0 12px 0;
-            z-index: -1;
-            padding: 15px;
-
-            .settings_menu_header {
-                text-align: center;
-                padding-bottom: 10px;
-                font-size: 1.8rem;
-                font-weight: 500;
-                border-bottom: 1px solid #ccc;
-            }
-
             .settings_menu_container {
                 .settings_menu_part {
-                    margin: 15px 0;
-                    padding: 0 8px;
-
-                    &:last-child {
-                        margin-bottom: 5px;
-                    }
-
                     .settings_menu_part_title {
                         display: flex;
                         align-items: center;
@@ -116,11 +222,6 @@ $theme-option-height: 54px;
                             width: 20px;
                             font-size: 1.7rem;
                             margin-right: 5px;
-                        }
-    
-                        span {
-                            font-size: 1.4rem;
-                            font-weight: 500;
                         }
                     }
                 }
@@ -131,6 +232,8 @@ $theme-option-height: 54px;
                     z-index: 10;
 
                     .settings_menu_part_title {
+                        margin-bottom: 0;
+
                         span {
                             width: 65px;
                         }
@@ -236,6 +339,44 @@ $theme-option-height: 54px;
                                 height: calc($theme-option-height - 4px);
                                 cursor: pointer;
                                 border-radius: 2px;
+
+                                .theme_option_header {
+                                    width: 100%;
+                                    height: 20%;
+                                    cursor: pointer;
+                                }
+
+                                .theme_option_content {
+                                    height: 80%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    cursor: pointer;
+
+                                    .theme_option_cat {
+                                        width: 18%;
+                                        background-color: rgb(245, 245, 245);
+                                        border-radius: 1px;
+                                        margin: 4% 4% 0 0;
+                                        cursor: pointer;
+
+                                        &:first-child {
+                                            margin-left: 4%;
+                                            height: 25%;
+                                        }
+
+                                        &:nth-child(2) {
+                                            height: 40%;
+                                        }
+
+                                        &:nth-child(3) {
+                                            height: 32%;
+                                        }
+
+                                        &:last-child {
+                                            height: 8%;
+                                        }
+                                    }
+                                }
                             }
 
                             &:hover {

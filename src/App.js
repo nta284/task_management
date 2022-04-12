@@ -109,7 +109,8 @@ function App() {
                                 bgColor: taskColors[Math.floor(Math.random() * taskColors.length)],
                                 description: '',
                                 date: null,
-                                time: null
+                                time: null,
+                                deadline: null
                             }
                         ]
                     },

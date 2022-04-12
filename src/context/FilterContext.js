@@ -4,13 +4,15 @@ const FilterContext = createContext();
 
 function FilterProvider({ children }) {
     const [isDeleted, setIsDeleted] = useState(false);
+    const [keyword, setKeyword] = useState('');
     const [isDone, setIsDone] = useState(null);
-    const [keyword, setKeyWord] = useState('');
+    const [deadline, setDeadline] = useState(null);
 
     const filterOptions = {
         isDeleted,
+        keyword,
         isDone,
-        keyword
+        deadline
     }
     
     for (const [key, value] of Object.entries(filterOptions)) {
@@ -22,10 +24,15 @@ function FilterProvider({ children }) {
     const filterContext = {
         filterMenu: {
             isDeleted,
+            keyword,
             isDone,
+            deadline,
             changeIsDeleted() {
                 setIsDeleted(!isDeleted);
-            }
+            },
+            setKeyword,
+            setIsDone,
+            setDeadline
         },
 
         catListFilter(task) {
@@ -36,7 +43,7 @@ function FilterProvider({ children }) {
                     filtering = filtering && task[key] === value;
                 }
                 else if (key === 'keyword') {
-                    filtering = filtering && task.task_name.includes(value);
+                    filtering = filtering && task.task_name.toLowerCase().includes(value.toLowerCase());
                 }
             }
     

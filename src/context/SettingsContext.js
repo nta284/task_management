@@ -8,6 +8,7 @@ function SettingsProvider({ children }) {
         const settingsStorage = JSON.parse(localStorage.getItem('settings'));
 
         return settingsStorage?.lang ?? 'VN';
+        // return 'VN';
     });
 
     const [theme, setTheme] = useState(() => {

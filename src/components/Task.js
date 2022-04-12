@@ -218,9 +218,9 @@ export default function Task({
                 <div className="task_date-and-time">
                     <div className="task_date task_date-and-time_item">
                         <div className="task_menu_title task_date-and-time_title">
-                            <div className="task_date-and-time_checkbox" onClick={toggleDate}>
-                                <div className={dateActive ? "task_date-and-time_checkbox_inner" : "task_date-and-time_checkbox_inner invisible"}>
-                                    <FontAwesomeIcon className='task_date-and-time_checkbox_tick' icon={faCheck} />
+                            <div className="checkbox" onClick={toggleDate}>
+                                <div className={dateActive ? "checkbox_inner" : "checkbox_inner invisible"}>
+                                    <FontAwesomeIcon className='checkbox_tick' icon={faCheck} />
                                 </div>
                             </div>
                             <FontAwesomeIcon icon={faCalendarDays} className='task_menu_icon'/>
@@ -235,9 +235,9 @@ export default function Task({
                     </div>
                     <div className={dateActive ? "task_time task_date-and-time_item" : "task_time task_date-and-time_item invisible"}>
                         <div className="task_menu_title task_date-and-time_title">
-                            <div className="task_date-and-time_checkbox" onClick={toggleTime}>
-                                <div className={timeActive ? "task_date-and-time_checkbox_inner" : "task_date-and-time_checkbox_inner invisible"}>
-                                    <FontAwesomeIcon className='task_date-and-time_checkbox_tick' icon={faCheck} />
+                            <div className="checkbox" onClick={toggleTime}>
+                                <div className={timeActive ? "checkbox_inner" : "checkbox_inner invisible"}>
+                                    <FontAwesomeIcon className='checkbox_tick' icon={faCheck} />
                                 </div>
                             </div>
                             <FontAwesomeIcon icon={faClock} className='task_menu_icon'/>
