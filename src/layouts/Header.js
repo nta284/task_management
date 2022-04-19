@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import './Header.scss';
+import Clock from '../components/Clock'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faGear, faLanguage, faBrush, faAngleDown, faFilter, faCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faGear, faLanguage, faBrush, faAngleDown, faFilter, faCheck, faCircleXmark, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import vietnamFlag from '../img/vietnam.png';
 import usaFlag from '../img/united-states.png';
+import { themeColors } from '../colors';
 import { SettingsContext } from '../context/SettingsContext';
 import { FilterContext } from '../context/FilterContext';
-import { themeColors } from '../colors';
-import Clock from './Clock';
 
-export default function Header() {
+export default function Header({ isMobile }) {
     const { lang, theme, setLang, setTheme } = useContext(SettingsContext);
 
     const { filterMenu } = useContext(FilterContext);
@@ -21,10 +21,11 @@ export default function Header() {
         changeIsDeleted,
         setIsDone,
         setKeyword,
-        setDeadline
+        setDeadline,
+        searchFilterApplying
     } = filterMenu;
 
-    const [searchFilterToggle, setSearchFilterToggle] = useState(true);
+    const [searchFilterToggle, setSearchFilterToggle] = useState(false);
     const [searchFocus, setSearchFocus] = useState(false);
 
     const [settingsToggle, setSettingsToggle] = useState(false);
@@ -84,16 +85,16 @@ export default function Header() {
             <div className='header_page-name'>
                 {lang === 'VN' ? 'Quản lý công việc cá nhân' : 'Personal Task Management'}
             </div>
-            <Clock />
+            {isMobile || <Clock />}
             <div className="search-filter" ref={searchFilter}>
                 <div
-                    className={searchFilterToggle ? "search-filter-wrapper search-filter-wrapper--active" : "search-filter-wrapper"}
+                    className={searchFilterToggle || searchFilterApplying ? "search-filter-wrapper search-filter-wrapper--active" : "search-filter-wrapper"}
                     onClick={() => setSearchFilterToggle(!searchFilterToggle)}
                 >
                     <FontAwesomeIcon className='filter-icon' icon={faFilter} />
                     <span>{lang === 'VN' ? 'Tìm kiếm và Bộ lọc' : 'Search and Filter'}</span>
                 </div>
-                <div className={searchFilterToggle ? "header_menu search-filter_menu" : "header_menu search-filter_menu invisible"}>
+                <div className={searchFilterToggle ? "header_menu search-filter_menu" : "header_menu search-filter_menu d-none"}>
                     <div className="header_menu_header search-filter_menu_header">
                         {lang === 'VN' ? 'Tìm kiếm và Bộ lọc' : 'Search and Filter'}
                     </div>
@@ -143,6 +144,14 @@ export default function Header() {
                                 <span>{lang === 'VN' ? 'Ngày và Giờ' : 'Date and Time'}</span>
                             </div>
                             <div className="search-filter_select search-filter_date-time-select">
+                                <div className="search-filter_option search-filter_date-time-option" onClick={() => handleFilterOption(setDeadline, deadline, 'soon')}>
+                                    <div className="checkbox">
+                                        <div className={deadline === 'soon' ? "checkbox_inner" : "checkbox_inner invisible"}>
+                                            <FontAwesomeIcon className='checkbox_tick' icon={faCheck} />
+                                        </div>
+                                    </div>
+                                    <span>{lang === 'VN' ? 'Sắp quá hạn' : 'Due soon'}</span>
+                                </div>
                                 <div className="search-filter_option search-filter_date-time-option" onClick={() => handleFilterOption(setDeadline, deadline, 'late')}>
                                     <div className="checkbox">
                                         <div className={deadline === 'late' ? "checkbox_inner" : "checkbox_inner invisible"}>
@@ -151,13 +160,18 @@ export default function Header() {
                                     </div>
                                     <span>{lang === 'VN' ? 'Đã quá hạn' : 'Past due'}</span>
                                 </div>
-                                <div className="search-filter_option search-filter_date-time-option" onClick={() => handleFilterOption(setDeadline, deadline, 'soon')}>
-                                    <div className="checkbox">
-                                        <div className={deadline === 'soon' ? "checkbox_inner" : "checkbox_inner invisible"}>
-                                            <FontAwesomeIcon className='checkbox_tick' icon={faCheck} />
-                                        </div>
+                            </div>
+                        </div>
+                        <div className="header_menu_part search-filter_menu_part search-filter_deleted">
+                            <div className="search-filter_deleted-toggle" onClick={changeIsDeleted}>
+                                <div className="checkbox">
+                                    <div className={isDeleted ? "checkbox_inner" : "checkbox_inner invisible"}>
+                                        <FontAwesomeIcon className='checkbox_tick' icon={faCheck} />
                                     </div>
-                                    <span>{lang === 'VN' ? 'Sắp quá hạn' : 'Due soon'}</span>
+                                </div>
+                                <div className='search-filter_deleted-toggle_text'>
+                                    <FontAwesomeIcon className='trash-can-icon' icon={faTrashCan} />
+                                    <span>{lang === 'VN' ? 'Đã xoá' : 'Deleted Tasks'}</span>
                                 </div>
                             </div>
                         </div>

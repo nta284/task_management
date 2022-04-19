@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Clock.scss';
 
-export default function Clock() {
+function Clock() {
     const [time, setTime] = useState(new Date());
     let minute = time.getMinutes().toString();
     minute = minute.length === 1 ? `0${minute}` : minute;
@@ -22,8 +22,10 @@ export default function Clock() {
                 <span>{`${time.getHours()}:${minute}`}</span>
             </div>
             <div className="header_clock_date">
-                <span>{`${time.getDate()}/${time.getMonth()}/${time.getFullYear()}`}</span>
+                <span>{`${time.getDate()}/${time.getMonth() + 1}/${time.getFullYear()}`}</span>
             </div>
         </div>
     )
 }
+
+export default React.memo(Clock);

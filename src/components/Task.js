@@ -1,27 +1,31 @@
 import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faPenToSquare, faEllipsisVertical, faPalette, faShuffle, faClipboard, faCalendarDays, faClock } from '@fortawesome/free-solid-svg-icons';
 import './Task.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faPenToSquare, faEllipsisVertical, faPalette, faShuffle, faClipboard, faCalendarDays, faClock, faReply, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { taskColors } from '../colors';
 import { SettingsContext } from '../context/SettingsContext';
 
 export default function Task({
     taskIndex,
     task: taskItem,
-    taskHandle
+    taskHandle,
+    isMobile
 }) {
 
     const {
         task_name,
+        isDeleted,
         isDone,
         bgColor,
         description,
         date,
-        time
+        time,
+        deadline
     } = taskItem;
 
     const {
-        handleDeleteTask,
+        handleDeleteRestoreTask,
+        handleDeleteTaskPermanently,
         handleMarkDoneTask,
         handleEditTask,
         handleEditBgColor,
@@ -41,11 +45,18 @@ export default function Task({
     const [dateActive, setDateActive] = useState(date !== null);
     const [timeActive, setTimeActive] = useState(time !== null);
 
+    const dateTimeStyleList = {
+        'normal': "task_date-time",
+        'soon': "task_date-time task_date-time--soon",
+        'late': "task_date-time task_date-time--late",
+        'done': "task_date-time task_date-time--done"
+    }
+
     const editInput = useRef(null);
     const task = useRef(null);
     const currentBgColor = useRef();
 
-    const dateValue = date !== null ? `${date.day}/${date.month}/${date.year}` : null;
+    const dateValue = date !== null ? `${date.day}/${date.month + 1}/${date.year}` : null;
 
     const { lang } = useContext(SettingsContext);
 
@@ -71,7 +82,7 @@ export default function Task({
         handleEditTaskDescription(taskIndex, descriptionValue);
     }, [bgColorValue, descriptionValue])
 
-    function deactivateMenu(e) {
+    function deactivateTaskMenu(e) {
         if (!task.current.contains(e.target)) {
             setMenuToggle(false);
         }
@@ -79,40 +90,33 @@ export default function Task({
 
     function toggleDate() {
         if (!dateActive) {
-            setDateActive(true);
             handleDateTime(taskIndex, 'SET_DATE');
         }
         else {
-            setDateActive(false);
-            setTimeActive(false);
             handleDateTime(taskIndex, 'CLEAR_DATE');
         }
     }
 
     function toggleTime() {
         if (!timeActive) {
-            setDateActive(true);
-            setTimeActive(true);
             handleDateTime(taskIndex, 'SET_TIME');
         }
         else {
-            setTimeActive(false);
             handleDateTime(taskIndex, 'CLEAR_TIME');
         }
     }
 
     useEffect(() => {
-        if (!time) {
-            setTimeActive(false);
-        }
-    }, [time])
+        setDateActive(date !== null);
+        setTimeActive(time !== null);
+    }, [date, time])
 
-    // Trigger deactivateMenu when click outside
+    // Trigger deactivateTaskMenu when click outside
     useEffect(() => {
-        window.addEventListener('click', deactivateMenu);
+        window.addEventListener('click', deactivateTaskMenu);
 
         return (() => {
-            window.removeEventListener('click', deactivateMenu);
+            window.removeEventListener('click', deactivateTaskMenu);
         })
     }, [])
 
@@ -129,14 +133,14 @@ export default function Task({
                     <FontAwesomeIcon className={isDone ? 'task_check' : 'task_check invisible'} icon={faCheck}/>
                 </div>
                 <div className="task_content">
-                    <div className='task_name-wrapper'>
+                    <div className='editable-wrapper task_name-wrapper'>
                         <span
-                            className={isEditing ? "task_name task_name--inactive" : "task_name"}
+                            className={isEditing ? "editable task_name editable--inactive" : "editable task_name"}
                         >
                             {task_name}
                         </span>
                         <input
-                            className={isEditing ? "task_edit" : "task_edit task_edit--inactive"}
+                            className={isEditing ? "editable_edit task_edit" : "editable_edit task_edit editable_edit--inactive"}
                             ref={editInput}
                             value={edit}
                             spellCheck='false'
@@ -152,9 +156,9 @@ export default function Task({
                             onChange={e => setEdit(e.target.value)}
                         />
                     </div>
-                    {date && <div className="task_date-time">{time && `${time}, `}{dateValue && dateValue}</div>}
+                    {date && <div className={dateTimeStyleList[deadline === 'normal' ? 'normal' : isDone ? 'done' : deadline]}>{time && `${time}, `}{dateValue && dateValue}</div>}
                 </div>
-                <div className={isEditing || iconDisplay || menuToggle ? "task_icon-section" : "task_icon-section opacity-0"}>
+                {isDeleted || <div className={isEditing || iconDisplay || menuToggle || isMobile ? "task_icon-section" : "task_icon-section opacity-0"}>
                     <FontAwesomeIcon
                         icon={faPenToSquare}
                         className="task-icon task-edit-icon"
@@ -170,7 +174,19 @@ export default function Task({
                         className="task-menu-icon"
                         onClick={() => setMenuToggle(!menuToggle)}
                     />
-                </div>
+                </div>}
+                {isDeleted && <div className="task_icon-section task_icon-section--deleted">
+                    <FontAwesomeIcon
+                        icon={faReply}
+                        className="task-icon task-restore-icon"
+                        onClick={() => handleDeleteRestoreTask(taskIndex)}
+                    />
+                    <FontAwesomeIcon
+                        icon={faTrashCan}
+                        className="task-icon task-delete-icon"
+                        onClick={() => handleDeleteTaskPermanently(taskIndex)}
+                    />
+                </div>}
             </div>
             <div className={menuToggle ? "task_menu task_menu--active" : "task_menu"}>
                 <div className="task_color">
@@ -252,7 +268,7 @@ export default function Task({
                     </div>
                 </div>
                 <div className="task_menu_delete">
-                    <span onClick={() => handleDeleteTask(taskIndex)}>Delete</span>
+                    <span onClick={() => handleDeleteRestoreTask(taskIndex)}>{lang === 'VN' ? 'Xóa' : 'Delete'}</span>
                 </div>
             </div>
         </div>

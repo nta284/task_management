@@ -49,6 +49,7 @@ input {
         justify-content: center;
         align-items: center;
         z-index: 5;
+        transition: 0.1s;
     
         &.add-activate-btn--inactive {
             opacity: 0;
@@ -82,6 +83,7 @@ input {
     
         .add-input {
             flex: 1;
+            margin-right: 0;
             font-size: 1.5rem;
             border: none;
             border: 2px solid var(--primary-color);
@@ -119,13 +121,19 @@ input {
     width: 14px;
     height: 14px;
     border: 1px solid #9d9d9d;
-    background-color: rgb(245, 245, 245);
+    background-color: rgb(242, 242, 242);
     border-radius: 4px;
     margin-right: 5px;
     margin-top: 1px;
     z-index: 2;
     cursor: pointer;
     position: relative;
+    transition: 0.2s ease-out;
+
+    &:hover {
+        border: 1px solid #666;
+        background-color: rgb(250, 250, 250);
+    }
 
     .checkbox_inner {
         position: absolute;
@@ -150,10 +158,56 @@ input {
     }
 }
 
+.editable-wrapper {
+    position: relative;
+
+    .editable {
+        z-index: 5;
+
+        &.editable--inactive {
+            z-index: -1;
+            visibility: collapse;
+        }
+    }
+
+    .editable_edit {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        left: 0;
+        padding: 0;
+        color: inherit;
+        font-weight: inherit;
+        font-size: inherit;
+        line-height: inherit;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        border-radius: 0;
+        z-index: 5;
+        cursor: text;
+        
+        &:focus {
+            outline: none;
+        }
+        
+        &.editable_edit--inactive {
+            visibility: collapse;
+            z-index: -1;
+            cursor: default;
+        }
+    }
+
+}
+
 .opacity-0 {
     opacity: 0;
 }
 
 .invisible {
     visibility: hidden;
+}
+
+.d-none {
+    display: none;
 }

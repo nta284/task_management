@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useReducer, useRef, useContext } from 'react';
 import './App.scss';
+import Header from './layouts/Header';
 import Category from './components/Category';
+import './components/Calendar-and-Clock.scss';
+import Calendar from 'react-calendar';
+import TimePicker from 'react-time-picker/dist/entry.nostyle';
 import { taskColors } from './colors';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {  faPlus, faClock, faXmark } from '@fortawesome/free-solid-svg-icons';
-import Calendar from 'react-calendar';
-import TimePicker from 'react-time-picker/dist/entry.nostyle';
-import './components/Calendar-and-Clock.scss';
-import { SettingsContext } from './context/SettingsContext';
 import { nanoid } from 'nanoid';
-import Header from './components/Header';
+import { SettingsContext } from './context/SettingsContext';
 
 function App() {
     const [catInput, setCatInput] = useState('');
@@ -17,11 +17,16 @@ function App() {
 
     const [toggleModal, setToggleModal] = useState(false);
     const [date, setDate] = useState(new Date());
-    const [time, setTime] = useState('');
+    const [time, setTime] = useState(null);
     const [targetIndex, setTargetIndex] = useState({
         catIndex: null,
         taskIndex: null
     })
+
+    const [clock, setClock] = useState(new Date());
+    const [clockMinute, setClockMinute] = useState(new Date().getMinutes());
+
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
     const addCatInput = useRef(null);
     const addCatInputSection = useRef(null);
@@ -34,15 +39,14 @@ function App() {
     function initializer() {
         const taskListStorage = JSON.parse(localStorage.getItem('taskList'));
 
-        // if (taskListStorage !== null && taskListStorage[0].id === null) {
+        // if (taskListStorage !== null) {
         //     return taskListStorage.map(cat => {
         //         return {
-        //             id: nanoid(),
         //             cat_name: cat.cat_name,
         //             cat_list: cat.cat_list.map(task => {
         //                 return {
         //                     ...task,
-        //                     id: nanoid()
+        //                     deadline: null
         //                 }
         //             })
         //         }
@@ -51,14 +55,62 @@ function App() {
         // else {
         //     return [
         //         {
-        //             id: nanoid(),
         //             cat_name: "Chung",
         //             cat_list: []
         //         }
         //     ]
         // }
 
+        const today = new Date();
+
         return taskListStorage ?? [
+            {
+                id: nanoid(),
+                cat_name: "Demo",
+                cat_list: [
+                    {
+                        id: nanoid(),
+                        task_name: 'Công việc 1',
+                        isDone: false,
+                        isDeleted: false,
+                        bgColor: taskColors[0],
+                        description: '',
+                        date: {
+                            day: today.getDate() + 1,
+                            month: today.getMonth(),
+                            year: today.getFullYear()
+                        },
+                        time: null,
+                        deadline: 'normal'
+                    },
+                    {
+                        id: nanoid(),
+                        task_name: 'Công việc 2',
+                        isDone: false,
+                        isDeleted: false,
+                        bgColor: taskColors[5],
+                        description: '',
+                        date: {
+                            day: today.getDate() + 2,
+                            month: today.getMonth(),
+                            year: today.getFullYear()
+                        },
+                        time: '08:00',
+                        deadline: 'normal'
+                    },
+                    {
+                        id: nanoid(),
+                        task_name: 'Công việc 3',
+                        isDone: false,
+                        isDeleted: false,
+                        bgColor: taskColors[2],
+                        description: '',
+                        date: null,
+                        time: null,
+                        deadline: 'normal'
+                    }
+                ]
+            },
             {
                 id: nanoid(),
                 cat_name: "Chung",
@@ -73,9 +125,13 @@ function App() {
         switch(action.type) {
             case 'ADD_CAT':
                 addCatInput.current.focus();
+
                 if (catInput !== '') {
-                    setCatInput('');
-        
+                    setTimeout(() => {
+                        setCatInput('');
+                        addCatInputSection.current.scrollIntoView();
+                    }, 0);
+                    
                     return [
                         ...taskList,
                         {
@@ -94,6 +150,16 @@ function App() {
                     return index !== action.payload.catIndex;
                 })
 
+            case 'EDIT_CAT':
+                return [
+                    ...taskList.slice(0, action.payload.catIndex),
+                    {
+                        ...taskList[action.payload.catIndex],
+                        cat_name: action.payload.newValue
+                    },
+                    ...taskList.slice(action.payload.catIndex + 1)
+                ]
+
             case 'ADD_TASK':
                 return [
                     ...taskList.slice(0, action.payload.catIndex),
@@ -110,14 +176,14 @@ function App() {
                                 description: '',
                                 date: null,
                                 time: null,
-                                deadline: null
+                                deadline: 'normal'
                             }
                         ]
                     },
                     ...taskList.slice(action.payload.catIndex + 1)
                 ]
 
-            case 'DELETE_TASK':
+            case 'DELETE_RESTORE_TASK':
                 // IMPURE FUNCTION
 
                 // newTaskList[action.payload.catIndex].cat_list[action.payload.taskIndex].isDeleted = !newTaskList[action.payload.catIndex].cat_list[action.payload.taskIndex].isDeleted;
@@ -135,6 +201,19 @@ function App() {
                             },
                             ...taskList[action.payload.catIndex].cat_list.slice(action.payload.taskIndex + 1)
                         ]
+                    },
+                    ...taskList.slice(action.payload.catIndex + 1)
+                ]
+
+            case 'DELETE_TASK_PERMANENTLY':
+                let newCatList = taskList[action.payload.catIndex].cat_list;
+                newCatList = newCatList.filter((task, index) => index !== action.payload.taskIndex);
+
+                return [
+                    ...taskList.slice(0, action.payload.catIndex),
+                    {
+                        ...taskList[action.payload.catIndex],
+                        cat_list: newCatList
                     },
                     ...taskList.slice(action.payload.catIndex + 1)
                 ]
@@ -235,6 +314,23 @@ function App() {
                     ...taskList.slice(action.payload.catIndex + 1)
                 ]
 
+            case 'EDIT_TASK_DEADLINE':
+                return [
+                    ...taskList.slice(0, action.payload.catIndex),
+                    {
+                        ...taskList[action.payload.catIndex],
+                        cat_list: [
+                            ...taskList[action.payload.catIndex].cat_list.slice(0, action.payload.taskIndex),
+                            {
+                                ...taskList[action.payload.catIndex].cat_list[action.payload.taskIndex],
+                                deadline: action.payload.deadlineValue
+                            },
+                            ...taskList[action.payload.catIndex].cat_list.slice(action.payload.taskIndex + 1)
+                        ]
+                    },
+                    ...taskList.slice(action.payload.catIndex + 1)
+                ]
+
             default:
                 return taskList;
         }
@@ -258,6 +354,16 @@ function App() {
             })
         },
 
+        editCat(catIndex, newValue) {
+            taskListDispatch({
+                type: 'EDIT_CAT',
+                payload: {
+                    catIndex,
+                    newValue
+                }
+            })
+        },
+
         addTask(catIndex, taskValue) {
             taskListDispatch({
                 type: 'ADD_TASK',
@@ -268,9 +374,19 @@ function App() {
             })
         },
 
-        deleteTask(catIndex, taskIndex) {
+        deleteRestoreTask(catIndex, taskIndex) {
             taskListDispatch({
-                type: 'DELETE_TASK',
+                type: 'DELETE_RESTORE_TASK',
+                payload: {
+                    catIndex,
+                    taskIndex
+                }
+            })
+        },
+
+        deleteTaskPermanently(catIndex, taskIndex) {
+            taskListDispatch({
+                type: 'DELETE_TASK_PERMANENTLY',
                 payload: {
                     catIndex,
                     taskIndex
@@ -327,50 +443,85 @@ function App() {
                 taskIndex
             });
 
-            if (action === 'SET_DATE') {
-                setDate(() => {
-                    let targetTaskDate = taskList[catIndex].cat_list[taskIndex].date;
-                    if (targetTaskDate === null){
-                        return new Date();
-                    }
-                    return new Date(
-                        targetTaskDate.year,
-                        targetTaskDate.month,
-                        targetTaskDate.day
-                    )
-                });
-    
-                setToggleModal(true);
-            }
-            else if (action === 'SET_TIME') {
-                setDate(() => {
-                    let targetTaskDate = taskList[catIndex].cat_list[taskIndex].date;
-                    if (targetTaskDate === null){
-                        return new Date();
-                    }
-                    return new Date(
-                        targetTaskDate.year,
-                        targetTaskDate.month,
-                        targetTaskDate.day
-                    )
-                });
-                setTime(() => {
-                    if (!taskList[catIndex].cat_list[taskIndex].time) {
-                        return '12:00';
-                    }
-                    return taskList[catIndex].cat_list[taskIndex].time;
-                });
-    
-                setToggleModal(true);
-            }
-            else if (action === 'CLEAR_DATE' || action === 'CLEAR_TIME') {
-                setTime(null);
-                setTaskDateTime(action, catIndex, taskIndex);
+            taskListDispatch({
+                type: 'EDIT_TASK_DEADLINE',
+                payload: {
+                    catIndex,
+                    taskIndex,
+                    deadlineValue: 'normal'
+                }
+            })
+            // console.log(action);
+
+            switch (action) {
+                case 'SET_DATE':
+                    setDate(() => {
+                        let targetTaskDate = taskList[catIndex].cat_list[taskIndex].date;
+                        if (targetTaskDate === null){
+                            console.log('No date');
+                            return new Date();
+                        }
+                        // console.log(targetTaskDate);
+                        return new Date(
+                            targetTaskDate.year,
+                            targetTaskDate.month,
+                            targetTaskDate.day
+                        )
+                    });
+        
+                    // console.log('Toggle modal');
+                    setToggleModal(true);
+                    break;
+
+                case 'SET_TIME':
+                    setDate(() => {
+                        let targetTaskDate = taskList[catIndex].cat_list[taskIndex].date;
+                        if (targetTaskDate === null){
+                            // console.log('No date');
+                            return new Date();
+                        }
+                        console.log(targetTaskDate);
+                        return new Date(
+                            targetTaskDate.year,
+                            targetTaskDate.month,
+                            targetTaskDate.day
+                            )
+                        });
+                    setTime(() => {
+                        let targetTaskTime = taskList[catIndex].cat_list[taskIndex].time;
+                        if (targetTaskTime === null) {
+                            // console.log('No time');
+                            return '12:00';
+                        }
+                        console.log(targetTaskTime);
+                        return targetTaskTime;
+                    });
+        
+                    setToggleModal(true);
+                    break;
+
+                case 'CLEAR_DATE':
+                case 'CLEAR_TIME':
+                    setTime(null);
+                    setTaskDateTime(action, catIndex, taskIndex);
+                    break;
+
+                default:
+                    break;
             }
         }
     }
 
     function setTaskDateTime(action, catIndex, taskIndex) {
+        taskListDispatch({
+            type: 'EDIT_TASK_DEADLINE',
+            payload: {
+                catIndex,
+                taskIndex,
+                deadlineValue: 'normal'
+            }
+        })
+
         if (action === 'SET') {
             setToggleModal(false);
             taskListDispatch({
@@ -424,14 +575,121 @@ function App() {
         }
     }
 
-    // Trigger deactivateAddCatInput when click outside
+    function handleWindowResize() {
+        setIsMobile(window.innerWidth <= 768);
+    }
+
+    // Window events
     useEffect(() => {
         window.addEventListener('click', deactivateAddCatInput);
+        window.addEventListener('resize', handleWindowResize);
 
         return () => {
             window.removeEventListener('click', deactivateAddCatInput);
+            window.removeEventListener('resize', handleWindowResize);
         }
     }, [])
+
+    // Clock
+    useEffect(() => {
+        const timeInterval = setInterval(() => {
+            setClock(new Date());
+        }, 1000);
+
+        return () => {
+            clearInterval(timeInterval);
+        }
+    }, [])
+
+    useEffect(() => {
+        setClockMinute(clock.getMinutes());
+    }, [clock])
+    
+    // Update deadline status of tasks
+    useEffect(() => {
+        // console.clear();
+        taskList.forEach((cat, catIndex) => {
+            for (let taskIndex = 0; taskIndex < cat.cat_list.length; taskIndex ++) {
+                const { date, time, deadline } = cat.cat_list[taskIndex];
+
+                if (date === null || deadline === 'late') {
+                    continue;
+                }
+                else if (date !== null && deadline !== 'late') {
+                    const { day, month, year } = date;
+
+                    if (time === null) {
+                        const due = new Date(year, month, day);
+
+                        if (clock >= due) {
+                            taskListDispatch({
+                                type: 'EDIT_TASK_DEADLINE',
+                                payload: {
+                                    catIndex,
+                                    taskIndex,
+                                    deadlineValue: 'late'
+                                }
+                            })
+                        }
+                        else {
+                            if (deadline !== 'soon') {
+                                if (due - clock <= 86400000) {
+                                    taskListDispatch({
+                                        type: 'EDIT_TASK_DEADLINE',
+                                        payload: {
+                                            catIndex,
+                                            taskIndex,
+                                            deadlineValue: 'soon'
+                                        }
+                                    })
+                                }
+                                else {
+                                    continue;
+                                }
+                            }
+                            else {
+                                continue;
+                            }
+                        }
+                    }
+                    else if (time !== null) {
+                        const due = new Date(year, month, day, time.slice(0, 2), time.slice(3, 5));
+
+                        if (clock >= due) {
+                            taskListDispatch({
+                                type: 'EDIT_TASK_DEADLINE',
+                                payload: {
+                                    catIndex,
+                                    taskIndex,
+                                    deadlineValue: 'late'
+                                }
+                            })
+                        }
+                        else {
+                            if (deadline !== 'soon') {
+                                if (due - clock <= 86400000) {
+                                    taskListDispatch({
+                                        type: 'EDIT_TASK_DEADLINE',
+                                        payload: {
+                                            catIndex,
+                                            taskIndex,
+                                            deadlineValue: 'soon'
+                                        }
+                                    })
+                                }
+                                else {
+                                    continue;
+                                }
+                            }
+                            else {
+                                continue;
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }, [clockMinute, taskList])
 
 
     // Save taskList to localStorage
@@ -444,7 +702,7 @@ function App() {
     return (
         <div className="App">
             <div className="wrapper">
-                <Header />
+                <Header isMobile={isMobile}/>
                 <div className="tasklist-section">
                     {taskList.map((category, index) => (
                         <Category
@@ -453,6 +711,7 @@ function App() {
                             cat_name={category.cat_name}
                             cat_list={category.cat_list}
                             taskListHandle={taskListHandle}
+                            isMobile={isMobile}
                         />
                     ))}
                     <div ref={addCatInputSection} className="add-section add-cat-section">
@@ -490,7 +749,7 @@ function App() {
                         </div>
                     </div>
                 </div>
-                {toggleModal && <div className="date-and-time-modal" onClick={e => {setTaskDateTime('SET');e.stopPropagation()}}>
+                {toggleModal && <div className="date-and-time-modal" onClick={e => {setTaskDateTime('SET', targetIndex.catIndex, targetIndex.taskIndex);e.stopPropagation()}}>
                     <div className="date-and-time-modal_container" onClick={e => {e.stopPropagation()}}>
                         <div className="date-and-time-modal_half">
                             <div className="date-and-time-modal_half_title">
@@ -512,7 +771,7 @@ function App() {
                                 onChange={setTime}
                             />
                         </div>
-                        <div className="date-and-time-modal_save-btn" onClick={() => setTaskDateTime('SET')}>
+                        <div className="date-and-time-modal_save-btn" onClick={() => setTaskDateTime('SET', targetIndex.catIndex, targetIndex.taskIndex)}>
                             {lang === 'VN' ? 'Lưu' : 'Save'}
                         </div>
                     </div>

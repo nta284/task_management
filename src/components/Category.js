@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState, useContext } from 'react';
+import React, { useEffect, useRef, useState, useContext, useLayoutEffect } from 'react';
 import './Category.scss';
 import Task from './Task';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {  faTrashCan, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
+import {  faCheck, faPlus, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { SettingsContext } from '../context/SettingsContext';
 import { FilterContext } from '../context/FilterContext';
 
@@ -10,12 +10,15 @@ export default function Category({
     catIndex,
     cat_name,
     cat_list,
-    taskListHandle
+    taskListHandle,
+    isMobile
 }) {
 
     const {
         deleteCat,
-        deleteTask,
+        editCat,
+        deleteRestoreTask,
+        deleteTaskPermanently,
         addTask,
         markDoneTask,
         editTask,
@@ -27,15 +30,27 @@ export default function Category({
     const [taskInput, setTaskInput] = useState('');
     const [addTaskActive, setAddTaskActive] = useState(false);
 
+    const [catMenuToggle, setCatMenuToggle] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [edit, setEdit] = useState(cat_name);
+
+    const catMenu = useRef(null);
+    const editInput = useRef(null);
+
     const addTaskInput = useRef(null);
     const addTaskInputSection = useRef(null);
+    const catList = useRef(null);
 
     const { lang } = useContext(SettingsContext);
-    const { catListFilter } = useContext(FilterContext);
+    const { filterMenu, catListFilter } = useContext(FilterContext);
 
     const taskHandle = {
-        handleDeleteTask(taskIndex) {
-            deleteTask(catIndex, taskIndex);
+        handleDeleteRestoreTask(taskIndex) {
+            deleteRestoreTask(catIndex, taskIndex);
+        },
+
+        handleDeleteTaskPermanently(taskIndex) {
+            deleteTaskPermanently(catIndex, taskIndex);
         },
         
         handleMarkDoneTask(taskIndex) {
@@ -59,11 +74,35 @@ export default function Category({
         }
     }
 
+    useLayoutEffect(() => {
+        if (!isEditing) {
+            if (edit !== '') {
+                editCat(catIndex, edit);
+            }
+            else {
+                editCat(catIndex, edit);
+                setTimeout(() => {
+                    editInput.current.focus();
+                }, 0);
+                setIsEditing(true);
+            }
+        }
+    }, [isEditing])
+
+    function deactivateCatMenu(e) {
+        if (!catMenu.current.contains(e.target)) {
+            setCatMenuToggle(false);
+        }
+    }
+
     function handleAddTaskFromCat() {
         addTaskInput.current.focus();
         if (taskInput !== '') {
-            setTaskInput('');
             addTask(catIndex, taskInput);
+            setTimeout(() => {
+                setTaskInput('');
+                catList.current.children[catList.current.children.length - 1].scrollIntoView();
+            }, 0);
         }
     }
 
@@ -84,9 +123,11 @@ export default function Category({
     // Trigger deactivateAddTaskInput when click outside
     useEffect(() => {
         window.addEventListener('click', deactivateAddTaskInput);
+        window.addEventListener('click', deactivateCatMenu);
 
         return () => {
             window.removeEventListener('click', deactivateAddTaskInput);
+            window.removeEventListener('click', deactivateCatMenu);
         }
     }, [])
 
@@ -94,11 +135,31 @@ export default function Category({
     return (
         <div className="category">
             <div className='category_header'>
-                <span className="category_name">
-                    {cat_name}
-                </span>
-                <div className="category_heading_progress">
-                    <div className="category_heading_progress-text">
+                <div className='editable-wrapper category_name-wrapper'>
+                    <span
+                        className={isEditing ? "editable category_name editable--inactive" : "editable category_name"}
+                    >
+                        {cat_name}
+                    </span>
+                    <input
+                        className={isEditing ? "editable_edit category_edit" : "editable_edit category_edit editable_edit--inactive"}
+                        ref={editInput}
+                        value={edit}
+                        spellCheck='false'
+                        onBlur={() => {
+                            setIsEditing(false);
+                        }}
+                        onKeyDown={e => {
+                            if (e.keyCode === 13) {
+                                setIsEditing(false);
+                                editInput.current.blur();
+                            }
+                        }}
+                        onChange={e => setEdit(e.target.value)}
+                    />
+                </div>
+                {filterMenu.searchFilterApplying || <div className="category_heading_details">
+                    <div className="category_heading_details-text">
                         <span>
                             {cat_list.filter(task => !task.isDeleted && task.isDone).length}
                         </span>
@@ -108,28 +169,64 @@ export default function Category({
                         </span>
                     </div>
                     <FontAwesomeIcon 
-                        className="category_heading_progress-check"
+                        className="category_heading_details-check"
                         icon={faCheck}
                     />
+                </div>}
+                {filterMenu.searchFilterApplying && <div className="category_heading_details">
+                    <div className="category_heading_details-text">
+                        <span>
+                            {cat_list.filter(task => catListFilter(task)).length}
+                        </span>
+                        <span>{lang === 'VN' ? ' kết quả' : ' results'}</span>
+                    </div>
+                </div>}
+                <div ref={catMenu} className="category_menu-wrapper">
+                    <FontAwesomeIcon 
+                        className="cat-menu-icon"
+                        icon={faEllipsisVertical}
+                        onClick={() => setCatMenuToggle(!catMenuToggle)}
+                    />
+                    <div className={catMenuToggle ? "category_menu category_menu--active" : "category_menu"}>
+                        <div
+                            className="category_menu_item"
+                            onClick={() => {
+                                setCatMenuToggle(false);
+                                setIsEditing(true);
+                                setTimeout(() => {
+                                    editInput.current.focus();
+                                }, 0);
+                            }}
+                        >
+                            {lang === 'VN' ? 'Sửa tên danh mục' : 'Edit category title'}
+                        </div>
+                        <div
+                            className="category_menu_item"
+                            onClick={() => {
+                                setCatMenuToggle(false);
+                                deleteCat(catIndex);
+                            }}
+                        >
+                            {lang === 'VN' ? 'Xóa danh mục' : 'Delete category'}
+                        </div>
+                    </div>
                 </div>
-                <FontAwesomeIcon 
-                    className="task-icon cat-delete-icon"
-                    icon={faTrashCan}
-                    onClick={() => deleteCat(catIndex)}
-                />
             </div>
-            <div className='category_list'>
-                {cat_list.map((task, index) => {
-                    return (
-                        catListFilter(task) && <Task
-                            key={task.id}
-                            className='task'
-                            taskIndex={index}
-                            task={task}
-                            taskHandle={taskHandle}
-                        />
-                    )
-                })}
+            <div className='category_list-wrapper'>
+                <div ref={catList} className="category_list">
+                    {cat_list.map((task, index) => {
+                        return (
+                            catListFilter(task) && <Task
+                                key={task.id}
+                                className='task'
+                                taskIndex={index}
+                                task={task}
+                                taskHandle={taskHandle}
+                                isMobile={isMobile}
+                            />
+                        )
+                    })}
+                </div>
             </div>
             <div ref={addTaskInputSection} className="add-section category_footer">
                 <div

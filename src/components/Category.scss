@@ -4,36 +4,40 @@ $category-margin: 20px;
 .category {
     width: 300px;
     max-height: 100%;
-    overflow-y: hidden;
+    overflow-y: visible;
     background-color: #fff;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     margin: 0px $category-margin 0px 0px;
     border-radius: 5px;
-    padding: 10px;
+    // padding: 10px;
     position: relative;
     display: flex;
     flex-direction: column;
-    z-index: 0;
+    z-index: 2;
     
     .category_header {
         font-weight: 440;
         text-align: left;
-        padding: 8px 2px 14px 6px;
+        padding: 18px 12px 4px 16px;
         display: flex;
         align-items: center;
+        z-index: 5;
         
-        .category_name {
+        .category_name-wrapper {
             flex: 1;
             font-size: 1.8rem;
             line-height: 22px;
-            margin-right: 3px;
+        
+            .category_edit {
+                border-bottom: 1px solid #333;
+            }
         }
 
-        .category_heading_progress {
-            margin-right: 8px;
+        .category_heading_details {
+            margin-right: 4px;
             display: flex;
 
-            .category_heading_progress-text {
+            .category_heading_details-text {
                 margin-right: 1px;
                 color: #888;
                 
@@ -42,27 +46,93 @@ $category-margin: 20px;
                 }
             }
 
-            .category_heading_progress-check {
+            .category_heading_details-check {
                 font-size: 1.25rem;
                 color: rgb(0, 201, 0);
                 transform: scaleX(0.8);
             }
         }
 
-        .cat-delete-icon {
-            font-size: 1.4rem;
-            color: #999;
+        .category_menu-wrapper {
+            position: relative;
+            z-index: 10;
+
+            .cat-menu-icon {
+                font-size: 1.6rem;
+                color: #666;
+                cursor: pointer;
+                width: 10px;
+                margin-right: -2px;
+            }
+
+            .category_menu {
+                position: absolute;
+                top: 120%;
+                right: -6px;
+                width: max-content;
+                background-color: #fff;
+                z-index: 20;
+                border-radius: 3px;
+                box-shadow: rgba($color: #000000, $alpha: 0.2) 0 0 10px 0;
+                padding: 4px 0;
+                border: 1px solid rgb(220, 220, 220);
+                transform: scaleY(0);
+                transform-origin: 0 0;
+                transition: 0.12s ease-out;
+
+                .category_menu_item {
+                    width: auto;
+                    background-color: #fff;
+                    padding: 10px 10px 8px;
+                    font-size: 1.4rem;
+                    font-weight: normal;
+                    cursor: pointer;
+                    transition: 0.2s ease-out;
+                    
+                    &:hover {
+                        background-color: rgb(243, 243, 243);
+                    }
+
+                    &:last-child {
+                        color: rgb(255, 46, 46);
+                    }
+                }
+
+                &.category_menu--active {
+                    transform: scaleY(1);
+                }
+            }
         }
     }
     
-    .category_list {
-        max-height: 540px;
-        width: 100%;
-        position: relative;
-        overflow-y: auto;
+    .category_list-wrapper {
+        overflow: hidden;
+        z-index: 1;
+        padding: 0 6px 0 10px;
+
+        .category_list {
+            max-height: 540px;
+            width: 100%;
+            position: relative;
+            overflow-y: auto;
+            padding-right: 4px;
+        
+            &::-webkit-scrollbar {
+                background-color: rgb(230, 230, 230);
+                width: 0.75rem;
+                border-radius: 4px;
+            }
+    
+            &::-webkit-scrollbar-thumb {
+                background-color: rgb(195, 195, 195);
+                border-radius: 99px;
+            }
+        }
     }
 
     .category_footer {
+        margin: 10px;
+        
         .add-task-activate-btn {
             width: 100%;
             height: 40px;

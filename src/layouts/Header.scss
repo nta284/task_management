@@ -27,7 +27,6 @@ $theme-option-height: 54px;
         right: 4px;
         background-color: #fff;
         border-radius: $settings-border-radius;
-        border-top-right-radius: 0px;
         box-shadow: rgba(0, 0, 0, 0.4) 0 0 12px 0;
         z-index: -1;
         padding: 15px;
@@ -91,7 +90,7 @@ $theme-option-height: 54px;
             }
 
             &.search-filter-wrapper--active {
-                background-color: #fff;
+                background-color: rgba(255, 255, 255, 0.92);
                 color: #555;
 
                 &:hover {
@@ -115,11 +114,15 @@ $theme-option-height: 54px;
                         background-color: #fff;
                         display: flex;
                         align-items: center;
-                        // padding: 0 10px;
                         border-radius: 5px;
                         margin-right: 5px;
                         border: 2px solid rgba(170, 170, 170, 0.5);
                         z-index: 2;
+                        transition: 0.15s ease-out;
+
+                        &:hover {
+                            border: 2px solid rgba(170, 170, 170, 0.8);
+                        }
                         
                         &.search--focus {
                             border: 2px solid #0079bf;
@@ -180,6 +183,48 @@ $theme-option-height: 54px;
                             }
                         }
                     }
+
+                    &.search-filter_deleted {
+                        display: flex;
+                        justify-content: end;
+
+                        .search-filter_deleted-toggle {
+                            display: flex;
+                            align-items: center;
+                            z-index: 2;
+                            cursor: pointer;
+                            background-color: #ff5454;
+                            padding: 8px 14px;
+                            border-radius: 5px;
+
+                            .checkbox {
+                                width: 14px;
+                                height: 14px;
+                                border: none;
+
+                                .checkbox_tick {
+                                    font-size: 1rem;
+                                }
+                            }
+
+                            .search-filter_deleted-toggle_text {
+                                color: #fff;
+                                font-size: 1.4rem;
+                                font-weight: 500;
+                                cursor: pointer;
+                                margin-left: 3px;
+                                margin-top: 1px;
+
+                                .trash-can-icon {
+                                    margin-right: 4px;
+                                }
+
+                                span {
+                                    cursor: pointer;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -197,7 +242,9 @@ $theme-option-height: 54px;
             .setting-icon {
                 font-size: 2.5rem;
                 color: #fff;
+                transform: rotate(0);
                 cursor: pointer;
+                transition: transform 0.2s ease-out, color 0s;
             }
             
             &.settings-wrapper--active {
@@ -207,6 +254,7 @@ $theme-option-height: 54px;
                 
                 .setting-icon {
                     color: #555;
+                    transform: rotate(60deg);
                 }
             }
         }
