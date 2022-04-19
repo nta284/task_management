@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/task_management/static/css/main.f595c5e2.css",
+    "main.css": "/task_management/static/css/main.0a65ac5e.css",
     "main.js": "/task_management/static/js/main.00b6b7dc.js",
     "static/media/united-states.png": "/task_management/static/media/united-states.4d9d990626a3df96a265.png",
     "static/media/vietnam.png": "/task_management/static/media/vietnam.a7a251f3ce4a10a7fd18.png",
     "index.html": "/task_management/index.html",
-    "main.f595c5e2.css.map": "/task_management/static/css/main.f595c5e2.css.map",
+    "main.0a65ac5e.css.map": "/task_management/static/css/main.0a65ac5e.css.map",
     "main.00b6b7dc.js.map": "/task_management/static/js/main.00b6b7dc.js.map"
   },
   "entrypoints": [
-    "static/css/main.f595c5e2.css",
+    "static/css/main.0a65ac5e.css",
     "static/js/main.00b6b7dc.js"
   ]
 }
